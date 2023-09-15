@@ -6,9 +6,9 @@ This module contains unit tests for the Bulldoggy app.
 # Imports
 # --------------------------------------------------------------------------------
 
-from app.utils.auth import serialize_token, deserialize_token
 from testlib.inputs import User
 
+from app.utils.auth import deserialize_token, serialize_token
 
 # --------------------------------------------------------------------------------
 # Tests

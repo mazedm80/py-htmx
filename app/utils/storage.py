@@ -6,13 +6,13 @@ This module handles the persistence layer (the "database") for the app.
 # Imports
 # --------------------------------------------------------------------------------
 
-from app.utils.exceptions import NotFoundException, ForbiddenException
-
-from pydantic import BaseModel
-from tinydb import TinyDB, Query
-from tinydb.table import Document
 from typing import List, Optional
 
+from pydantic import BaseModel
+from tinydb import Query, TinyDB
+from tinydb.table import Document
+
+from app.utils.exceptions import ForbiddenException, NotFoundException
 
 # --------------------------------------------------------------------------------
 # Models

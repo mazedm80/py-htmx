@@ -8,7 +8,6 @@ This module provides exceptions for the app.
 
 from fastapi import HTTPException, status
 
-
 # --------------------------------------------------------------------------------
 # Exceptions
 # --------------------------------------------------------------------------------

@@ -9,7 +9,6 @@ This module contains API tests for the Bulldoggy app.
 from playwright.sync_api import APIRequestContext
 from testlib.inputs import User
 
-
 # --------------------------------------------------------------------------------
 # Tests
 # --------------------------------------------------------------------------------

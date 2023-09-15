@@ -13,11 +13,10 @@ TODO: storage state for UI and API
 # --------------------------------------------------------------------------------
 
 import json
-import pytest
 
+import pytest
 from playwright.sync_api import Playwright
 from testlib.inputs import User
-
 
 # --------------------------------------------------------------------------------
 # Private Functions

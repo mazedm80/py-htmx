@@ -11,7 +11,6 @@ import re
 from playwright.sync_api import Page, expect
 from testlib.inputs import User
 
-
 # --------------------------------------------------------------------------------
 # Login Behaviors
 #

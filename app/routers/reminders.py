@@ -6,13 +6,12 @@ This module provides routes for the reminders pages.
 # Imports
 # --------------------------------------------------------------------------------
 
-from app import templates
-from app.utils.auth import get_storage_for_page
-from app.utils.storage import ReminderStorage
-
 from fastapi import APIRouter, Depends, Form, Request
 from fastapi.responses import HTMLResponse
 
+from app import templates
+from app.utils.auth import get_storage_for_page
+from app.utils.storage import ReminderStorage
 
 # --------------------------------------------------------------------------------
 # Router

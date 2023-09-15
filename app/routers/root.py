@@ -6,13 +6,13 @@ This module provides routes for authentication.
 # Imports
 # --------------------------------------------------------------------------------
 
-from app import templates
-from app.utils.auth import AuthCookie, get_auth_cookie
+from typing import Optional
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import FileResponse, RedirectResponse
-from typing import Optional
 
+from app import templates
+from app.utils.auth import AuthCookie, get_auth_cookie
 
 # --------------------------------------------------------------------------------
 # Router
