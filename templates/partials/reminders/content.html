@@ -1,26 +1,21 @@
-<div class="reminders-content">
-    <div class="reminders-content-lists">
-        <div class="reminders-card paper-card">
-            <h3 class="reminders-card-title">Reminder Lists</h3>
-            <div class="reminders-list-list">
-                {% for reminder_list in reminder_lists %}
-                    {% include "partials/reminders/list-row.html" %}
-                {% endfor %}
-                {% include "partials/reminders/new-list-row.html" %}
-            </div>
+<div class="w-1 p-4 bg-white border border-gray-200 shadow sm:p-8">
+    <ul class="max-w-md divide-y divide-gray-200">
+        {% for reminder_list in reminder_lists %}
+        {% include "partials/reminders/list-row.html" %}
+        {% endfor %}
+        {% include "partials/reminders/new-list-row.html" %}
+    </ul>
+</div>
+<div class="reminders-content-items">
+    {% if selected_list %}
+    <div class="reminders-card paper-card">
+        <h3 class="reminders-card-title">{{ selected_list.name }}</h3>
+        <div class="reminders-item-list">
+            {% for reminder_item in selected_list.items %}
+            {% include "partials/reminders/item-row.html" %}
+            {% endfor %}
+            {% include "partials/reminders/new-item-row.html" %}
         </div>
     </div>
-    <div class="reminders-content-items">
-        {% if selected_list %}
-        <div class="reminders-card paper-card">
-            <h3 class="reminders-card-title">{{ selected_list.name }}</h3>
-            <div class="reminders-item-list">
-                {% for reminder_item in selected_list.items %}
-                    {% include "partials/reminders/item-row.html" %}
-                {% endfor %}
-                {% include "partials/reminders/new-item-row.html" %}
-            </div>
-        </div>
-        {% endif %}
-    </div>
+    {% endif %}
 </div>

@@ -1,23 +1,27 @@
-"""
-This module is the main module for the FastAPI app.
-"""
-
-# --------------------------------------------------------------------------------
-# Imports
-# --------------------------------------------------------------------------------
-
+import uvicorn
 from fastapi import FastAPI, Request
-from fastapi.openapi.utils import get_openapi
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseSettings
 from starlette.exceptions import HTTPException
 
 from app.routers import api, login, reminders, root
 from app.utils.exceptions import UnauthorizedPageException
 
-# --------------------------------------------------------------------------------
-# App Creation
-# --------------------------------------------------------------------------------
+
+class ApiSettings(BaseSettings):
+    """Schema for configuring API parameters."""
+
+    host: str = "0.0.0.0"
+    port: int = 8000
+    debug: bool = False
+    workers: int = 1
+
+    class Config:
+        env_prefix = "API_"
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+
 
 app = FastAPI(
     docs_url=None,  # Disable docs (Swagger UI)
@@ -34,7 +38,6 @@ app.include_router(reminders.router)
 # --------------------------------------------------------------------------------
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
 
 # --------------------------------------------------------------------------------
 # Exception Handlers
@@ -56,49 +59,12 @@ async def page_not_found_exception_handler(request: Request, exc: HTTPException)
         return RedirectResponse("/not-found")
 
 
-# --------------------------------------------------------------------------------
-# OpenAPI Customization
-# --------------------------------------------------------------------------------
-
-
-def custom_openapi():
-    if app.openapi_schema:
-        return app.openapi_schema
-
-    description = """Bulldoggy is a web app for tracking reminders.
-    It is a full-stack Python app built using FastAPI and HTMX.
-    It is meant to be an "example" or "demo" app used for instructional purposes.
-    """
-
-    openapi_schema = get_openapi(
-        title="Bulldoggy: The Reminders App",
-        version="1.0.0",
-        description=description,
-        routes=app.routes,
-        tags=[
-            {
-                "name": "API",
-                "description": "Backend API routes for managing reminder lists and items.",
-            },
-            {
-                "name": "Pages",
-                "description": "The main Bulldoggy web pages.",
-            },
-            {
-                "name": "Authentication",
-                "description": "Routes for logging into and out of the app.",
-            },
-            {
-                "name": "HTMX Partials",
-                "description": "Routes that serve partial web page contents for HTMX-based requests.",
-            },
-        ],
+if __name__ == "__main__":
+    settings = ApiSettings()
+    uvicorn.run(
+        "main:app",
+        host=settings.host,
+        port=settings.port,
+        workers=settings.workers,
+        reload=settings.debug,
     )
-
-    openapi_schema["info"]["x-logo"] = {"url": "static/img/logos/bulldoggy-500px.png"}
-
-    app.openapi_schema = openapi_schema
-    return app.openapi_schema
-
-
-app.openapi = custom_openapi
