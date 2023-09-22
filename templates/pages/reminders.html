@@ -1,16 +1,8 @@
-<html>
-
-<head>
-    <title>Reminders | Bulldoggy reminders app</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="/static/js/htmx.min.js"></script>
-</head>
-
-<body class="min-h-screen bg-gray-100">
-    {% include "common/header.html" %}
-    <!-- {% include "common/navbar.html" %} -->
-    <!-- {% include "partials/reminders/content.html" %} -->
-</body>
-
-</html>
+{% extends "pages/base.html" %}
+{% block header %}
+{% include "components/header.html" %}
+{% include "components/navbar.html" %}
+{% endblock %}
+{% block content %}
+{% include "partials/items.html" %}
+{% endblock %}

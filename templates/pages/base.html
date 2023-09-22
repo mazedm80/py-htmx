@@ -9,8 +9,9 @@
     <title>My Webpage</title>
 </head>
 
-<body>
-    <div id="content">{% block content %}{% endblock %}</div>
+<body class="h-full">
+    {% block header %}{% endblock %}
+    <main>{% block content %}{% endblock %}</main>
     <div id="footer">
         {% block footer %}
         &copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.
