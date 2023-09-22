@@ -1,11 +1,3 @@
-"""
-This module provides routes for authentication.
-"""
-
-# --------------------------------------------------------------------------------
-# Imports
-# --------------------------------------------------------------------------------
-
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Request
@@ -15,16 +7,7 @@ from app import templates
 from app.utils.auth import AuthCookie, get_auth_cookie, get_login_form_creds
 from app.utils.exceptions import UnauthorizedPageException
 
-# --------------------------------------------------------------------------------
-# Router
-# --------------------------------------------------------------------------------
-
 router = APIRouter()
-
-
-# --------------------------------------------------------------------------------
-# Routes
-# --------------------------------------------------------------------------------
 
 
 @router.get(

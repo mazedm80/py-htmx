@@ -1,12 +1,3 @@
-"""
-This module provides routes for the API,
-which provides a "backdoor" for reminder data management.
-"""
-
-# --------------------------------------------------------------------------------
-# Imports
-# --------------------------------------------------------------------------------
-
 from typing import Dict, List, Optional
 
 from fastapi import APIRouter, Depends
@@ -14,10 +5,6 @@ from pydantic import BaseModel
 
 from app.utils.auth import get_storage_for_api
 from app.utils.storage import ReminderItem, ReminderList, ReminderStorage
-
-# --------------------------------------------------------------------------------
-# Router
-# --------------------------------------------------------------------------------
 
 router = APIRouter(prefix="/api", tags=["API"])
 
