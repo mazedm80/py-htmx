@@ -43,7 +43,6 @@ env:
 	@python3 -m venv .env
 	@source .env/bin/activate \
 		&& pip install -qU pip \
-		&& pip install -q -r requirements.txt \
 		&& poetry self add --quiet poetry-bumpversion@latest
 
 check-%:

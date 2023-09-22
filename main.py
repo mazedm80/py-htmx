@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic_settings import BaseSettings
 from starlette.exceptions import HTTPException
 
-from app.routers import login, dashboard, root
+from app.routers import dashboard, login, root
 from app.utils.exceptions import UnauthorizedPageException
 
 
