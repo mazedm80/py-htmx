@@ -1,10 +1,10 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse
 
 from app import templates
-from app.utils.auth import AuthCookie, get_auth_cookie, get_login_form_creds
+from app.utils.auth import AuthCookie, get_auth_cookie
 from app.utils.exceptions import UnauthorizedPageException
 
 router = APIRouter()
@@ -22,5 +22,5 @@ async def get_dashboard(
 ):
     context = {"request": request}
     if not cookie:
-        return RedirectResponse(url="/login")
+        raise UnauthorizedPageException()
     return templates.TemplateResponse("pages/dashboard.html", context)

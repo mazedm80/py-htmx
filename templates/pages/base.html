@@ -5,16 +5,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    <script defer src="https://unpkg.com/htmx.org@1.9.6"
+        integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
+        crossorigin="anonymous"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <title>My Webpage</title>
+    <title>py-htmx</title>
 </head>
 
 <body class="h-full">
     {% block header %}{% endblock %}
     <main>{% block content %}{% endblock %}</main>
-    <div id="footer">
+    <div id="footer" class="flex justify-center text-lg text-center text-gray-800 mt-5">
         {% block footer %}
-        &copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.
+        &copy; Copyright 2023
         {% endblock %}
     </div>
 </body>

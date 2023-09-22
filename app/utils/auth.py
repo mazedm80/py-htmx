@@ -1,44 +1,22 @@
-"""
-This module provides security and authentication.
-"""
-
-# --------------------------------------------------------------------------------
-# Imports
-# --------------------------------------------------------------------------------
-
 import secrets
 from typing import Optional
 
-import jwt
 from fastapi import Cookie, Depends, Form
 from fastapi.security import HTTPBasic
+from jose import jwt
 from pydantic import BaseModel
 
 from app import secret_key, users
 from app.utils.exceptions import UnauthorizedException, UnauthorizedPageException
 
-# --------------------------------------------------------------------------------
-# Globals
-# --------------------------------------------------------------------------------
-
 basic_auth = HTTPBasic(auto_error=False)
 auth_cookie_name = "reminders_session"
-
-
-# --------------------------------------------------------------------------------
-# Models
-# --------------------------------------------------------------------------------
 
 
 class AuthCookie(BaseModel):
     name: str
     token: str
     username: str
-
-
-# --------------------------------------------------------------------------------
-# Serializers
-# --------------------------------------------------------------------------------
 
 
 def serialize_token(username: str) -> str:
@@ -49,13 +27,8 @@ def deserialize_token(token: str) -> str:
     try:
         data = jwt.decode(token, secret_key, algorithms=["HS256"])
         return data["username"]
-    except:
+    except Exception:
         return None
-
-
-# --------------------------------------------------------------------------------
-# Authentication Checkers
-# --------------------------------------------------------------------------------
 
 
 def get_login_form_creds(
