@@ -13,12 +13,21 @@
    ```
 
 2. Create a virtual environment and install the required tools:
+
     ```sh
     make install
     ```
+
 3. Run the service locally
+
     ```sh
+    # Your code here
+    ```
+
     make run
+
+    ```sh
+    # Your code here
     ```
 
 ## Available Targets
@@ -37,21 +46,14 @@ There are also some aliases defined, such as `i` for `install`, `r` for `run`, `
 
 The following dependencies are required to use this Makefile:
 
-- python 3.6 or higher
-- poetry 1.4.0 or higher
-- black 23.1.0 or higher
+- python 3.8 or higher
+- poetry 1.6.0 or higher
+- black 23.9.0 or higher
 - isort 5.12.0 or higher
-- pytest 7.2.2 or higher
 
 They will be installed in a virtual environment with `make install`
 
 The following dependencies are required to use this service:
 
-- fastapi = 0.95.0 or higher
-- uvicorn = 0.21.1 or higher
-
-## Contributing
-1. Create a new branch for your feature or bugfix.
-2. Write your code and tests.
-3. Commit your changes and push them to your branch.
-4. Submit a pull request.
+- fastapi = 0.103.1 or higher
+- uvicorn = 0.23.2 or higher
