@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 from starlette.exceptions import HTTPException
 
 from app.routers import login, dashboard, root

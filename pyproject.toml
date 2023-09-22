@@ -8,3 +8,23 @@ skip_glob = ["*pb2.py"]
 line-length = 88
 target-version = ['py36', 'py37', 'py38']
 include = '\.pyi?$'
+
+[tool.poetry]
+name = "py-htmx"
+version = "0.0.1"
+description = "test project for fastapi and htmx"
+authors = ["Mir Mazedur Rahaman <mir.rahaman@bareways.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pydantic-settings = "^2.0.3"
+
+[tool.poetry.group.dev.dependencies]
+fastapi = "^0.103.1"
+uvicorn = "^0.23.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
