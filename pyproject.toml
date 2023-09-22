@@ -23,6 +23,7 @@ pydantic-settings = "^2.0.3"
 pydantic = "^2.3.0"
 black = "^23.9.1"
 isort = "^5.12.0"
+pytailwindcss = "^0.2.0"
 
 [tool.poetry.group.dev.dependencies]
 fastapi = "^0.103.1"
