@@ -8,7 +8,7 @@
 1. Clone the repository:
 
    ```sh
-   git clone <path to repository>
+   git clone https://github.com/mazedm80/py-htmx.git
    cd project
    ```
 
@@ -23,7 +23,6 @@
 
 ## Available Targets
 
-- `build`: Builds the package using Poetry and sets the version number based on the provided `VERSION` and `BUILD_NUMBER` values. The resulting package is saved in the `dist` folder.
 - `checkstyle`: Checks the code style of the project using black and isort. The target fails if the code style is not compliant.
 - `clear`: Removes all build files and folders.
 - `codestyle`: Applies the code style to the project using black and isort.
@@ -32,7 +31,7 @@
 - `run`: Executes the service locally.
 - `test`: Runs pytest against the package.
 
-There are also some aliases defined, such as `b` for `build`, `i` for `install`, `r` for `run`, `t` for `test`, `cl` for `clear`, and `cs` for `codestyle`.
+There are also some aliases defined, such as `i` for `install`, `r` for `run`, `t` for `test`, `cl` for `clear`, and `cs` for `codestyle`.
 
 ## Dependencies
 
@@ -48,7 +47,6 @@ They will be installed in a virtual environment with `make install`
 
 The following dependencies are required to use this service:
 
-- barways (http://pandora:8080/bareways-library/develop/...)
 - fastapi = 0.95.0 or higher
 - uvicorn = 0.21.1 or higher
 
