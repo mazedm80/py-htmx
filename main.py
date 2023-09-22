@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseSettings
 from starlette.exceptions import HTTPException
 
-from app.routers import api, login, reminders, root
+from app.routers import login, dashboard, root
 from app.utils.exceptions import UnauthorizedPageException
 
 
@@ -28,9 +28,8 @@ app = FastAPI(
     redoc_url=None,  # Disable redoc
 )
 app.include_router(root.router)
-app.include_router(api.router)
+app.include_router(dashboard.router)
 app.include_router(login.router)
-app.include_router(reminders.router)
 
 
 # --------------------------------------------------------------------------------

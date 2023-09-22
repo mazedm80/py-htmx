@@ -36,7 +36,7 @@ async def post_login(
     cookie: Optional[AuthCookie] = Depends(get_login_form_creds),
 ) -> dict:
     if cookie:
-        response = RedirectResponse("/reminders", status_code=302)
+        response = RedirectResponse("/dashboard", status_code=302)
         response.set_cookie(key=cookie.name, value=cookie.token)
     else:
         response = RedirectResponse("/login?invalid=True", status_code=302)

@@ -14,9 +14,8 @@ from fastapi import Cookie, Depends, Form
 from fastapi.security import HTTPBasic
 from pydantic import BaseModel
 
-from app import db_path, secret_key, users
+from app import secret_key, users
 from app.utils.exceptions import UnauthorizedException, UnauthorizedPageException
-from app.utils.storage import ReminderStorage
 
 # --------------------------------------------------------------------------------
 # Globals
@@ -103,15 +102,3 @@ def get_username_for_page(
         raise UnauthorizedPageException()
 
     return cookie.username
-
-
-def get_storage_for_api(
-    username: str = Depends(get_username_for_api),
-) -> ReminderStorage:
-    return ReminderStorage(owner=username, db_path=db_path)
-
-
-def get_storage_for_page(
-    username: str = Depends(get_username_for_page),
-) -> ReminderStorage:
-    return ReminderStorage(owner=username, db_path=db_path)

@@ -4,6 +4,7 @@ src_paths = ["app", "tests"]
 skip_gitignore = true
 skip_glob = ["*pb2.py"]
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.black]
+line-length = 88
+target-version = ['py36', 'py37', 'py38']
+include = '\.pyi?$'

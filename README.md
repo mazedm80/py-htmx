@@ -1,116 +1,59 @@
-![Bulldoggy Logo](static/img/logos/bulldoggy-100px.png)
+## Prerequisites
 
-# Bulldoggy: The Reminders App
+- Python 3.8 or later
+- `make`
 
-*Bulldoggy* is a small demo web app for tracking reminders.
-It uses:
+## Getting Started
 
-* [Python](https://www.python.org/) as the main programming language
-* [FastAPI](https://fastapi.tiangolo.com/) for the backend
-* [HTMX](https://htmx.org/) 1.8.6 for handling dynamic interactions (instead of raw JavaScript)
-* [Jinja templates](https://jinja.palletsprojects.com/en/3.1.x/) with HTML and CSS for the frontend
-* [TinyDB](https://tinydb.readthedocs.io/en/latest/index.html) for the database
-* [Playwright](https://playwright.dev/python/) and [pytest](https://docs.pytest.org/) for testing
+1. Clone the repository:
 
-I first shared Bulldoggy in my PyTexas 2023 keynote, [*Full-Stack Python*](https://www.youtube.com/watch?v=ka5KRLUn47s).
+   ```sh
+   git clone <path to repository>
+   cd project
+   ```
 
+2. Create a virtual environment and install the required tools:
+    ```sh
+    make install
+    ```
+3. Run the service locally
+    ```sh
+    make run
+    ```
 
-## Installing dependencies
+## Available Targets
 
-You will need a recent version of Python to run this app.
-To install project dependencies:
+- `build`: Builds the package using Poetry and sets the version number based on the provided `VERSION` and `BUILD_NUMBER` values. The resulting package is saved in the `dist` folder.
+- `checkstyle`: Checks the code style of the project using black and isort. The target fails if the code style is not compliant.
+- `clear`: Removes all build files and folders.
+- `codestyle`: Applies the code style to the project using black and isort.
+- `help`: Displays the help message for the Makefile.
+- `install`: Creates a virtual environment and installs the package with all dependencies using Poetry.
+- `run`: Executes the service locally.
+- `test`: Runs pytest against the package.
 
-```
-pip install -r requirements.txt
-```
+There are also some aliases defined, such as `b` for `build`, `i` for `install`, `r` for `run`, `t` for `test`, `cl` for `clear`, and `cs` for `codestyle`.
 
-It is recommended to install dependencies into a [virtual environment](https://docs.python.org/3/library/venv.html).
+## Dependencies
 
+The following dependencies are required to use this Makefile:
 
-## Running the app
+- python 3.6 or higher
+- poetry 1.4.0 or higher
+- black 23.1.0 or higher
+- isort 5.12.0 or higher
+- pytest 7.2.2 or higher
 
-To run the app:
+They will be installed in a virtual environment with `make install`
 
-```
-uvicorn app.main:app --reload
-```
+The following dependencies are required to use this service:
 
-Then, open your browser to [`http://127.0.0.1:8000`](http://127.0.0.1:8000) to load the app.
+- barways (http://pandora:8080/bareways-library/develop/...)
+- fastapi = 0.95.0 or higher
+- uvicorn = 0.21.1 or higher
 
-
-## Logging into the app
-
-The [`config.json`](config.json) file declares the users for the app.
-You may use any configured user credentials, or change them to your liking.
-The "default" username is `pythonista` with the password `I<3testing`.
-
-
-## Setting the database path
-
-The app uses TinyDB, which stores the database as a JSON file.
-The default database filepath is `reminder_db.json`.
-You may change this path in [`config.json`](config.json).
-If you change the filepath, the app will automatically create a new, empty database.
-
-
-## Using the app
-
-Bulldoggy is a reminders app.
-After you log in, you can create reminder lists.
-
-![Bulldoggy login](static/img/readme/bulldoggy-login.png)
-
-Each reminder list appears on the left,
-and the items in the list appear on the right.
-You may add, delete, or edit lists and items.
-You may also strike out completed items.
-
-![Bulldoggy reminders](static/img/readme/bulldoggy-reminders.png)
-
-
-## Reading the docs
-
-To read the API docs, open the following pages:
-
-* [`/docs`](http://127.0.0.1:8000/docs) for classic OpenAPI docs
-* [`/redoc`](http://127.0.0.1:8000/redoc) for more modern ReDoc docs
-
-
-## Why did I build this app in Python?
-
-Personally, I love Python, and I wanted to demonstrate how to **build a full-stack modern web app *entirely* with Python**.
-
-JavaScript essentially has a near-monopoly on front-end web development.
-Browsers require JavaScript code to perform dynamic web page interactions.
-However, [HTMX](https://htmx.org/) offers a novel way to sidestep this limitation:
-it provides special HTML attributes to denote dynamic interactions for elements.
-Under the hood, HTMX uses AJAX to issue HTTP requests and swap hypertext contents for elements targetted with its special attributes.
-JavaScript is still there – you just don't need to touch it!
-
-This enables web frameworks in languages like Python, Go, Java, and others to offer dynamic web page content
-directly in HTML *without* requiring developers to explicitly code any JavaScript.
-HTMX empowers you, as a developer, to build beautiful web apps while remaining in the tech stack of your choice!
-
-To learn more about this app's design, please watch my [PyTexas](https://www.pytexas.org/) 2023 keynote,
-[*Full-Stack Python*](https://www.youtube.com/watch?v=ka5KRLUn47s).
-
-
-## Credits
-
-* I used [DALL-E](https://labs.openai.com/) to generate the Bulldoggy logo
-* I used [ChatGPT](https://chat-gpt.org/chat) to generate parts of the HTML and CSS
-* [Michael Kennedy](https://twitter.com/mkennedy)'s talks at [PyBay 2021](https://www.youtube.com/watch?v=10G874qqtrc) and [Python Web Conference 2022](https://www.youtube.com/watch?v=10G874qqtrc_) on Python + HTMX inspired me
-* The [HTMX docs](https://htmx.org/docs/) and [examples](https://htmx.org/examples/) taught me how to use HTMX
-* A few friends from Twitter and LinkedIn helped me test the app:
-  * [Juan Rosello](https://www.linkedin.com/in/juanrosello/)
-  * [Sharib Islam](https://www.linkedin.com/in/sharibislamqa/)
-  * [therunninglight](https://twitter.com/therunninglight)
-  * [enigma5312](https://twitter.com/enigma5312)
-  * [MrpoSr](https://twitter.com/MrpoSr)
-
-
-## TODO list
-
-* Automate API tests
-* Automate UI tests
-* Automate unit tests
+## Contributing
+1. Create a new branch for your feature or bugfix.
+2. Write your code and tests.
+3. Commit your changes and push them to your branch.
+4. Submit a pull request.

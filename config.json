@@ -1,6 +1,4 @@
 {
-  "db_path": "reminder_db.json",
-
   "secret_key": "Pandas are awesome!",
 
   "users": {
