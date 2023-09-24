@@ -30,14 +30,9 @@ test: install ## Run pytest against package
 	@source .env/bin/activate; \
 		scripts/run_tests.sh
 
-checkstyle: env
+tailwind: env
 	@source .env/bin/activate; \
-		black --check --quiet . && isort --check-only --quiet .; \
-		EXITCODE=$$?; \
-		if [[ $${EXITCODE} -ne 0 ]]; then \
-			echo -e "\nYour revision violates codestyle (HINT: fix with make codestyle)"; \
-			exit $${EXITCODE}; \
-		fi
+		tailwindcss -i ./static/css/input.css -o ./static/css/style.css --watch
 
 env:
 	@python3 -m venv .env
@@ -56,3 +51,4 @@ r: run
 t: test
 cl: clear
 cs: codestyle
+tw: tailwind
