@@ -11,7 +11,7 @@ clear: ## Clear all build files and folders
 
 codestyle: env ## Apply codestyle
 	@source .env/bin/activate; \
-		black .; \
+		ruff . --fix; \
 		isort .;
 
 run: ## Execute the service locally

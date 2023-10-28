@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
 
 from app import templates
-from app.utils.auth import AuthCookie, get_auth_cookie
+from app.utils.auth import Token, get_auth_cookie
 from app.utils.exceptions import UnauthorizedPageException
 
 router = APIRouter()
@@ -18,7 +18,7 @@ router = APIRouter()
 )
 async def get_dashboard(
     request: Request,
-    cookie: Optional[AuthCookie] = Depends(get_auth_cookie),
+    cookie: Optional[Token] = Depends(get_auth_cookie),
 ):
     context = {"request": request}
     if not cookie:
