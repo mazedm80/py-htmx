@@ -11,8 +11,8 @@ router = APIRouter()
 
 
 @router.get(
-    path="/dashboard",
-    summary="Gets the main dashboard page",
+    path="/restaurant",
+    summary="Gets the restaurant page",
     tags=["Pages"],
     response_class=HTMLResponse,
 )
@@ -24,4 +24,4 @@ async def get_dashboard(
     context = {"request": request}
     if not cookie:
         raise UnauthorizedPageException()
-    return templates.TemplateResponse("pages/dashboard.html", context)
+    return templates.TemplateResponse("pages/restaurant.html", context)

@@ -2,7 +2,7 @@ import secrets
 from typing import Optional
 
 import httpx
-from fastapi import Cookie, Depends, Form
+from fastapi import Cookie, Depends, Form, Request
 from pydantic import BaseModel, field_validator
 
 from app.utils.exceptions import UnauthorizedException, UnauthorizedPageException
@@ -37,18 +37,28 @@ class AuthoToken(BaseModel):
 
 
 def get_login_form_creds(
-    email: str = Form(), password: str = Form()
+    email: str = Form(), password: str = Form(), remember_me: bool = Form(default=False)
 ) -> Optional[Token]:
     cookie = None
-    with httpx.Client() as client:
-        response = client.post(
-            f"{settings.api_host}/auth/login",
-            params={"email": email, "password": password},
-        )
-        if response.status_code == 200:
-            token = response.json()
-            cookie = Token.model_validate(token)
+    # with httpx.Client() as client:
+    #     response = client.post(
+    #         f"{settings.api_host}/auth/login",
+    #         params={"email": email, "password": password},
+    #     )
+    #     if response.status_code == 200:
+    #         token = response.json()
+    #         cookie = Token.model_validate(token)
     return cookie
+
+
+def set_auth_cookie(
+    email: str = Form(), password: str = Form(), remember_me: bool = Form(default=False)
+):
+    return {
+        "email": email,
+        "password": password,
+        "remember_me": remember_me,
+    }
 
 
 def get_auth_cookie(

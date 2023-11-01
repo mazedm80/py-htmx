@@ -13,13 +13,15 @@
     <title>py-htmx</title>
 </head>
 
-<body class="h-screen bg-gray-100">
-    {% block header %}{% endblock %}
-    <main>{% block content %}{% endblock %}</main>
-    <div id="footer" class="flex justify-center text-lg text-center text-gray-800 mt-5">
+<body class="h-screen overflow-hidden antialiased bg-gray-100">
+    <div class="flex">
+        {% block header %}{% endblock %}
+        <main class="overflow-y-auto">{% block content %}{% endblock %}</main>
+        <!-- <div id="footer" class="flex justify-center text-lg text-center text-gray-800 mt-5">
         {% block footer %}
         &copy; Copyright 2023
         {% endblock %}
+    </div> -->
     </div>
 </body>
 

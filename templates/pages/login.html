@@ -5,31 +5,39 @@
     <div class=" flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <h5 class="text-xl leading-tight tracking-tight text-gray-900 mb-4 md:text-2xl">py-htmx</h5>
         <div class="w-full bg-white rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0">
-            <div class=" p-6 space-y-4 md:space-y-6 sm:p-8">
+            <div x-data="{ showPassword: false }" class=" p-6 space-y-4 md:space-y-6 sm:p-8">
                 <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                     Sign in to your account
                 </h1>
                 <form class="login-form space-y-4 md:space-y-6" action="/login" method="post">
                     <div class="relative">
+                        <div class="absolute flex top-10 inset-y-0 left-3">
+                            <i class="fa-solid fa-at text-gray-500"></i>
+                        </div>
                         <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Your
                             email</label>
                         <input type="text" placeholder="Enter email" name="email"
-                            class="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-inset focus:ring-blue-600 block w-full p-2.5"
+                            class="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-inset focus:ring-blue-600 block w-full p-2.5 pl-8"
                             required="">
                     </div>
                     <div class="relative">
                         <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Password</label>
-                        <div class="absolute flex top-10 pl-3">
-                            <i class="fa-solid fa-user"></i>
+                        <div class="absolute flex top-10 inset-y-0 left-3">
+                            <i class="fa-solid fa-lock text-gray-500"></i>
                         </div>
-                        <input type="password" name="password" id="password" placeholder="••••••••"
+                        <input type="password" x-bind:type="showPassword ? 'text' : 'password'" name="password"
+                            id="password" placeholder="••••••••"
                             class="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-inset focus:ring-blue-600 block w-full p-2.5 pl-8"
                             required="">
+                        <div class="absolute flex top-10 inset-y-0 right-3">
+                            <i @click="showPassword = !showPassword" class="fa-solid fa-eye text-gray-500"></i>
+                        </div>
                     </div>
-                    <div class="flex items-center justify-between">
+                    <div x-data="{isChecked: false}" class="flex items-center justify-between">
                         <div class="flex items-start">
                             <div class="flex items-center h-5">
-                                <input id="remember" aria-describedby="remember" type="checkbox"
+                                <input x-model="isChecked" name="remember_me" id="remember_me"
+                                    aria-describedby="remember" type="checkbox"
                                     class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-500">
                             </div>
                             <div class="ml-3 text-sm">
