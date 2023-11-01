@@ -3,9 +3,8 @@ from typing import Optional
 
 import httpx
 from fastapi import Cookie, Depends, Form
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
-from app import secret_key, users
 from app.utils.exceptions import UnauthorizedException, UnauthorizedPageException
 from config.settings import settings
 
@@ -16,25 +15,39 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
+    @field_validator("token_type")
+    @classmethod
+    def validate_token_type(cls, token_type: str):
+        if token_type != "bearer":
+            raise ValueError("Invalid token type")
+        return token_type
+
+
+class AuthoToken(BaseModel):
+    """Autho token schema."""
+
+    token_name: str
+    access_token: str
+    expires_in: int
+    id_token: str
+    scope: str
+    token_type: str
+    refresh_token: str
+    user_id: str
+
 
 def get_login_form_creds(
     email: str = Form(), password: str = Form()
 ) -> Optional[Token]:
     cookie = None
-    username = email
-    print(f"username = {username} and password = {password}")
     with httpx.Client() as client:
         response = client.post(
             f"{settings.api_host}/auth/login",
-            data={"username": username, "password": password},
+            params={"email": email, "password": password},
         )
         if response.status_code == 200:
             token = response.json()
-            print(f"token = {token}")
-            cookie = Token(
-                access_token=token["access_token"], token_type=token["token_type"]
-            )
-
+            cookie = Token.model_validate(token)
     return cookie
 
 
