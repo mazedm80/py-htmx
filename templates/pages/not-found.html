@@ -1,20 +1,47 @@
-<html>
+{% extends "pages/base.html" %}
+{% block content %}
+<div class="px-4 py-8 sm:px-6">
+    <div>
+        <h1 class="text-2xl font-medium text-gray-700 sm:text-3xl"> 404
+        </h1>
 
-<head>
-    <title>Not Found | Bulldoggy reminders app</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/shared.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/not-found.css">
-</head>
+        <div class="hidden mt-3 overflow-y-auto text-sm lg:items-center lg:flex whitespace-nowrap">
+            <a href="#" class="text-gray-600 hover:underline">
+                Pages
+            </a>
 
-<body>
-    <div class="not-found-page">
-        <div class="not-found-content paper-card">
-            <h1 id="not-found-title">Not found!</h1>
-            <img id="bulldoggy-logo" src="/static/img/logos/bulldoggy-100px.png" />
-            <p class="not-found-message">The page you requested does not exist.</p>
-            <p class="not-found-message">Please try again.</p>
+            <span class="mx-1 text-gray-500">
+                /
+            </span>
+
+            <a href="#" class="text-indigo-600 hover:underline">
+                404
+            </a>
         </div>
     </div>
-</body>
 
-</html>
+    <div class="mt-6">
+        <div class="flex flex-col items-center justify-center h-96">
+            <h1
+                class="font-bold text-transparent text-7xl md:text-9xl bg-clip-text bg-gradient-to-r from-indigo-800 via-indigo-900 to-gray-900">
+                404</h1>
+
+            <div class="w-32 h-1 my-6 bg-gradient-to-r from-indigo-800 via-indigo-900 to-gray-900 md:my-6"></div>
+
+            <h2 class="text-xl font-semibold text-gray-800 md:text-3xl">Page not found</h2>
+
+
+            <a href="/preview/premium-dashboard/"
+                class="flex items-center px-4 py-2 mt-6 tracking-wide text-gray-600 capitalize transition-colors duration-200 transform bg-white rounded-md hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-400 focus:ring-opacity-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1.5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
+                </svg>
+
+                <span class="mx-1.5">Go Back</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

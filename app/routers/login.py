@@ -46,6 +46,19 @@ async def post_login(
     return response
 
 
+@router.get(
+    path="/register",
+    summary="Gets the login page",
+    tags=["Pages", "Authentication"],
+    response_class=HTMLResponse,
+)
+async def get_login(request: Request):
+    context = {
+        "request": request,
+    }
+    return templates.TemplateResponse("pages/register.html", context)
+
+
 logout = dict(path="/logout", summary="Logs out of the app", tags=["Authentication"])
 
 
