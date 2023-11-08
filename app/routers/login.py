@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 from app import templates
-from app.utils.auth import Token, get_login_form_creds, get_auth_cookie, set_auth_cookie
+from app.utils.auth import AuthoToken, Token, get_login_form_creds
 from app.utils.exceptions import UnauthorizedPageException
 
 router = APIRouter()
@@ -33,13 +33,17 @@ async def get_login(
 
 @router.post(path="/login", summary="Logs into the app", tags=["Authentication"])
 async def post_login(
-    cookie: Dict | Token = Depends(set_auth_cookie),  # get_login_form_creds
+    auth_token: AuthoToken = Depends(get_login_form_creds),  # get_login_form_creds
 ) -> dict:
-    if cookie:
-        print(cookie["remember_me"])
+    if auth_token:
         response = RedirectResponse("/dashboard", status_code=302)
-        response.set_cookie(key="remember", value=cookie["remember_me"])
-        # response.set_cookie(key="test", value=cookie.access_token)
+        response.set_cookie(
+            key=auth_token.token_name,
+            value=auth_token.access_token,
+            expires=auth_token.expires_in,
+            httponly=True,
+            secure=True,
+        )
     else:
         response = RedirectResponse("/login?invalid=True", status_code=302)
 
@@ -64,7 +68,7 @@ logout = dict(path="/logout", summary="Logs out of the app", tags=["Authenticati
 
 @router.get(**logout)
 @router.post(**logout)
-async def post_login(cookie: Optional[Token] = Depends(get_auth_cookie)) -> dict:
+async def post_login(cookie: Optional[Token] = Depends(get_login_form_creds)) -> dict:
     if not cookie:
         raise UnauthorizedPageException()
 

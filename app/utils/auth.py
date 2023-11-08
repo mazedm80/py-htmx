@@ -1,4 +1,3 @@
-import secrets
 from typing import Optional
 
 import httpx
@@ -29,70 +28,86 @@ class AuthoToken(BaseModel):
     token_name: str
     access_token: str
     expires_in: int
-    id_token: str
-    scope: str
-    token_type: str
-    refresh_token: str
-    user_id: str
+
+
+class User(BaseModel):
+    """User schema."""
+
+    id: int
+    name: str
+    email: str
+    auth_group: int
+
+
+def create_cookie(
+    token: Token,
+    remember_me: bool = False,
+) -> AuthoToken:
+    """Creates a cookie."""
+
+    expires_in = 60 * 60 * 24 * 7 if remember_me else 60 * 60 * 24
+
+    return AuthoToken(
+        token_name="user_session",
+        access_token=token.access_token,
+        expires_in=expires_in,
+    )
 
 
 def get_login_form_creds(
     email: str = Form(), password: str = Form(), remember_me: bool = Form(default=False)
-) -> Optional[Token]:
+) -> Optional[AuthoToken]:
     cookie = None
-    # with httpx.Client() as client:
-    #     response = client.post(
-    #         f"{settings.api_host}/auth/login",
-    #         params={"email": email, "password": password},
-    #     )
-    #     if response.status_code == 200:
-    #         token = response.json()
-    #         cookie = Token.model_validate(token)
+    with httpx.Client() as client:
+        response = client.post(
+            f"{settings.api_host}/auth/login",
+            params={"email": email, "password": password},
+        )
+        if response.status_code == 200:
+            token = response.json()
+            cookie = Token.model_validate(token)
+            cookie = create_cookie(cookie, remember_me=remember_me)
     return cookie
 
 
-def set_auth_cookie(
-    email: str = Form(), password: str = Form(), remember_me: bool = Form(default=False)
+def register_user(
+    name: str = Form(),
+    bday: str = Form(),
+    email: str = Form(),
+    password: str = Form(),
+    password2: str = Form(),
+    role: str = Form(),
 ):
-    return {
-        "email": email,
-        "password": password,
-        "remember_me": remember_me,
-    }
-
-
-def get_auth_cookie(
-    reminders_session: Optional[str] = Cookie(default=None),
-) -> Optional[Token]:
-    cookie = None
-    print(f"reminders_session = {reminders_session}")
-    if reminders_session:
-        with httpx.Client() as client:
-            response = client.get(
-                f"{settings.api_host}/auth/login",
-                headers={"Authorization": f"Bearer {reminders_session}"},
-            )
-            if response.status_code == 200:
-                token = response.json()
-                cookie = Token(
-                    access_token=token["access_token"], token_type=token["token_type"]
-                )
+    if password != password2:
+        raise UnauthorizedException()
+    with httpx.Client() as client:
+        response = client.post(
+            f"{settings.api_host}/auth/register",
+            params={
+                "name": name,
+                "bday": bday,
+                "email": email,
+                "password": password,
+                "role": role,
+            },
+        )
+        if response.status_code == 200:
+            token = response.json()
+            cookie = Token.model_validate(token)
+            cookie = create_cookie(cookie)
     return cookie
 
 
-def get_username_for_api(
-    cookie: Optional[Token] = Depends(get_auth_cookie),
-) -> str:
-    if not cookie:
-        raise UnauthorizedException()
-
-    return cookie.username
-
-
-def get_username_for_page(
-    cookie: Optional[Token] = Depends(get_auth_cookie),
-) -> str:
-    if not cookie:
+def get_userinfo_for_page(user_session: Optional[str] = Cookie(default=None)) -> User:
+    if not user_session:
         raise UnauthorizedPageException()
-
-    return cookie.username
+    with httpx.Client() as client:
+        response = client.get(
+            f"{settings.api_host}/auth/me",
+            headers={"Authorization": f"Bearer {user_session}"},
+        )
+        if response.status_code == 200:
+            user = response.json()
+            return User.model_validate(user)
+        else:
+            raise UnauthorizedPageException()

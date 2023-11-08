@@ -1,0 +1,77 @@
+<div x-data="{ modelOpenedit: true }">
+    <div x-show="modelOpenedit" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen px-4 text-center md:items-center sm:block sm:p-0">
+            <div @click="modelOpenedit = false" x-show="modelOpenedit"
+                x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200 transform"
+                x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-40" aria-hidden="true"></div>
+
+            <div id="modals-here" x-show="modelOpenedit" x-transition:enter="transition ease-out duration-300 transform"
+                x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                x-transition:leave="transition ease-in duration-200 transform"
+                x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                class="inline-block w-full max-w-xl p-8 my-20 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl rtl:text-right 2xl:max-w-2xl">
+                <div class="flex items-center justify-between">
+                    <h1 class="text-xl font-medium text-gray-800 ">{{ properties.title }}</h1>
+
+                    <button @click="modelOpenedit = false" class="text-gray-600 focus:outline-none hover:text-gray-700">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <p class="mt-2 text-sm text-gray-500 ">
+                    {{ properties.info }}
+                </p>
+
+                <form>
+                    <div class="relative mt-4">
+                        <label for="name" class="block text-sm text-gray-700 capitalize">Restaurant name</label>
+                        <input value="{{ restaurant.name }}" type="text" name="name"
+                            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                    </div>
+
+                    <div class="relative mt-4">
+                        <label for="address" class="block text-sm text-gray-700 capitalize">Restaurant address</label>
+                        <input value="{{ restaurant.address }}" type="text" name="address"
+                            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                    </div>
+
+                    <div class="relative mt-4">
+                        <label for="phone" class="block text-sm text-gray-700 capitalize">Restaurant phone</label>
+                        <input value="{{ restaurant.phone }}" type="text" name="phone"
+                            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                    </div>
+
+                    <div class="relative mt-4">
+                        <label for="email" class="block text-sm text-gray-700 capitalize">Restaurant email</label>
+                        <input value="{{ restaurant.email }}" type="email" name="email"
+                            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                    </div>
+
+                    <div class="relative mt-4">
+                        <label for="website" class="block text-sm text-gray-700 capitalize">Restaurant website</label>
+                        <input value="{{ restaurant.website }}" type="text" name="website"
+                            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                    </div>
+
+                    <div class="relative mt-4">
+                        <label for="image" class="block text-sm text-gray-700 capitalize">Restaurant image</label>
+                        <input value="{{ restaurant.image }}" type="text" name="image"
+                            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                    </div>
+
+                    <div class="flex justify-end mt-6">
+                        <button type="button"
+                            class="px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
+                            Invite Member
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

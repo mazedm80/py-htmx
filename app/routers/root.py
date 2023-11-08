@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import RedirectResponse
 
 from app import templates
-from app.utils.auth import Token, get_auth_cookie
+from app.utils.auth import Token, get_userinfo_for_page
 
 router = APIRouter()
 
@@ -12,7 +12,7 @@ router = APIRouter()
 @router.get(
     path="/", summary="Redirects to the login or dashboard pages", tags=["Pages"]
 )
-async def read_root(cookie: Optional[Token] = Depends(get_auth_cookie)):
+async def read_root(cookie: Optional[Token] = Depends(get_userinfo_for_page)):
     path = "/dashboard" if cookie else "/login"
     return RedirectResponse(path, status_code=302)
 

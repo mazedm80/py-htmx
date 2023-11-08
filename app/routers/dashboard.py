@@ -4,24 +4,25 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
 
 from app import templates
-from app.utils.auth import Token, get_auth_cookie
+from app.utils.auth import Token, User, get_userinfo_for_page
 from app.utils.exceptions import UnauthorizedPageException
 
-router = APIRouter()
+router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
 
 @router.get(
-    path="/dashboard",
+    path="",
     summary="Gets the main dashboard page",
     tags=["Pages"],
     response_class=HTMLResponse,
 )
 async def get_dashboard(
     request: Request,
-    # cookie: Optional[Token] = Depends(get_auth_cookie),
-    cookie: int = 1,
+    user: Optional[User] = Depends(get_userinfo_for_page),
 ):
-    context = {"request": request}
-    if not cookie:
+    title = "Dashboard"
+    context = {"request": request, "title": title}
+    if not user:
         raise UnauthorizedPageException()
+    print(user)
     return templates.TemplateResponse("pages/dashboard.html", context)

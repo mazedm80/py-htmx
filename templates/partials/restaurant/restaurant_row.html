@@ -1,0 +1,41 @@
+<tr data-id="{{ restaurant.id }}">
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+        {{ restaurant.name }}
+    </td>
+
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+        {{ restaurant.address }}
+    </td>
+
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+        {{ restaurant.phone }}
+    </td>
+
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+        {{ restaurant.email }}
+    </td>
+
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+        {{ restaurant.website }}
+    </td>
+
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+        {{ restaurant.image }}
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap"></td>
+
+    <td class="px-6 py-4 whitespace-nowrap">
+        <div class="flex items-center">
+            <button hx-get="/restaurant/edit/{{ restaurant.id }}" hx-target="#edit-modal" hx-swap="innerHTML"
+                hx-trigger="click" hx-confirm="unset"
+                class="mx-4 text-gray-500 focus:outline-none hover:text-indigo-500">
+                <i class="fa-regular fa-pen-to-square text-xl"></i>
+            </button>
+
+            <button id="delete" hx-delete="/restaurant/{{ restaurant.id }}"
+                class="text-gray-500 focus:outline-none hover:text-indigo-500">
+                <i class="fa-regular fa-trash-can text-xl"></i>
+            </button>
+        </div>
+    </td>
+</tr>

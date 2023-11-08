@@ -20,70 +20,73 @@
                         required="">
                 </div>
                 <div class="relative"">
-                    <label for=" bday" class="block mb-2 text-sm font-medium text-gray-900">Your birthday</label>
-                    <input type="date" name="bday"
-                        class="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-inset focus:ring-blue-600 block w-full p-2.5 pl-8"
-                        required="">
+                    <div class=" absolute flex top-10 inset-y-0 left-3">
+                    <i class="fa-solid fa-calendar-days text-gray-500"></i>
                 </div>
-                <div class="relative">
-                    <div class="absolute flex top-10 inset-y-0 left-3">
-                        <i class="fa-solid fa-at text-gray-500"></i>
-                    </div>
-                    <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Your
-                        email</label>
-                    <input type="text" placeholder="Enter email" name="email" id="email"
-                        class="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-inset focus:ring-blue-600 block w-full p-2.5 pl-8"
-                        required="">
-                </div>
-                <div x-data="{ showPassword: false }" class="relative">
-                    <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Password</label>
-                    <div class="absolute flex top-10 inset-y-0 left-3">
-                        <i class="fa-solid fa-lock text-gray-500"></i>
-                    </div>
-                    <input type="password" x-bind:type="showPassword ? 'text' : 'password'" name="password"
-                        id="password" placeholder="••••••••"
-                        class="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-inset focus:ring-blue-600 block w-full p-2.5 pl-8"
-                        required="">
-                    <div class="absolute flex top-10 inset-y-0 right-3">
-                        <i @click="showPassword = !showPassword" class="fa-solid fa-eye text-gray-500"></i>
-                    </div>
-                </div>
-                <div x-data="{ showPassword: false }" class="relative">
-                    <label for="password2" class="block mb-2 text-sm font-medium text-gray-900">Repeat password</label>
-                    <div class="absolute flex top-10 inset-y-0 left-3">
-                        <i class="fa-solid fa-lock text-gray-500"></i>
-                    </div>
-                    <input type="password" x-bind:type="showPassword ? 'text' : 'password'" name="password2"
-                        id="password2" placeholder="••••••••"
-                        class="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-inset focus:ring-blue-600 block w-full p-2.5 pl-8"
-                        required="">
-                    <div class="absolute flex top-10 inset-y-0 right-3">
-                        <i @click="showPassword = !showPassword" class="fa-solid fa-eye text-gray-500"></i>
-                    </div>
-                </div>
-                <button type="submit"
-                    class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign
-                    up</button>
-                <p class="text-sm font-light text-gray-500">
-                    Already have an account? <a href="/login" class="font-medium text-blue-600 hover:underline">Sign
-                        in</a>
-                </p>
-                {% if invalid %}
-                <div class="invalid-login-warning">
-                    <p>Invalid login! Please retry.</p>
-                </div>
-                {% elif logged_out %}
-                <div class="invalid-login-warning">
-                    <p>Successfully logged out.</p>
-                </div>
-                {% elif unauthorized %}
-                <div class="invalid-login-warning">
-                    <p>Please login first.</p>
-                </div>
-                {% endif %}
-            </form>
+                <label for=" bday" class="block mb-2 text-sm font-medium text-gray-900">Your birthday</label>
+                <input type="date" name="bday"
+                    class="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-inset focus:ring-blue-600 block w-full p-2.5 pl-8"
+                    required="">
         </div>
+        <div class="relative">
+            <div class="absolute flex top-10 inset-y-0 left-3">
+                <i class="fa-solid fa-at text-gray-500"></i>
+            </div>
+            <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Your
+                email</label>
+            <input type="text" placeholder="Enter email" name="email" id="email"
+                class="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-inset focus:ring-blue-600 block w-full p-2.5 pl-8"
+                required="">
+        </div>
+        <div x-data="{ showPassword: false }" class="relative">
+            <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Password</label>
+            <div class="absolute flex top-10 inset-y-0 left-3">
+                <i class="fa-solid fa-lock text-gray-500"></i>
+            </div>
+            <input type="password" x-bind:type="showPassword ? 'text' : 'password'" name="password" id="password"
+                placeholder="••••••••"
+                class="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-inset focus:ring-blue-600 block w-full p-2.5 pl-8"
+                required="">
+            <div class="absolute flex top-10 inset-y-0 right-3">
+                <i @click="showPassword = !showPassword" class="fa-solid fa-eye text-gray-500"></i>
+            </div>
+        </div>
+        <div x-data="{ showPassword: false }" class="relative">
+            <label for="password2" class="block mb-2 text-sm font-medium text-gray-900">Repeat password</label>
+            <div class="absolute flex top-10 inset-y-0 left-3">
+                <i class="fa-solid fa-lock text-gray-500"></i>
+            </div>
+            <input type="password" x-bind:type="showPassword ? 'text' : 'password'" name="password2" id="password2"
+                placeholder="••••••••"
+                class="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-inset focus:ring-blue-600 block w-full p-2.5 pl-8"
+                required="">
+            <div class="absolute flex top-10 inset-y-0 right-3">
+                <i @click="showPassword = !showPassword" class="fa-solid fa-eye text-gray-500"></i>
+            </div>
+        </div>
+        <div class="relative">
+            <label for="role" class="block mb-2 text-sm font-medium text-gray-900">Select your role</label>
+            <div class="absolute flex top-10 inset-y-0 left-3">
+                <i class="fa-solid fa-list-check text-gray-500"></i>
+            </div>
+            <select name="role"
+                class="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-inset focus:ring-blue-600 block w-full p-2.5 pl-8">
+                <option>Select one</option>
+                <option>Owner</option>
+                <option>Manager</option>
+                <option>Staff</option>
+            </select>
+        </div>
+        <button type="submit"
+            class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign
+            up</button>
+        <p class="text-sm font-light text-gray-500">
+            Already have an account? <a href="/login" class="font-medium text-blue-600 hover:underline">Sign
+                in</a>
+        </p>
+        </form>
     </div>
+</div>
 </div>
 
 {% endblock %}
