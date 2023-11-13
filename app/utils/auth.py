@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Dict, Optional
 
 import httpx
 from fastapi import Cookie, Depends, Form, Request
@@ -77,9 +77,10 @@ def register_user(
     password: str = Form(),
     password2: str = Form(),
     role: str = Form(),
-):
+) -> Dict[str, str]:
+    errors = {}
     if password != password2:
-        raise UnauthorizedException()
+        errors["password"] = "Passwords do not match"
     with httpx.Client() as client:
         response = client.post(
             f"{settings.api_host}/auth/register",

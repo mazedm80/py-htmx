@@ -58,10 +58,14 @@
                             class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
                     </div>
 
-                    <div class="relative mt-4">
-                        <label for="image" class="block text-sm text-gray-700 capitalize">Restaurant image</label>
-                        <input value="{{ restaurant.image }}" type="text" name="image"
-                            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                    <div>
+                        <label for="image" class="block text-sm text-gray-700 capitalize">image</label>
+                        <label
+                            class="flex flex-col items-center justify-center w-full h-32 mt-2 text-gray-500 border-2 border-dashed rounded-md cursor-pointer hover:text-gray-600 md:h-44">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span class="mt-4">Select Image</span>
+                            <input id="upload" type="file" class="hidden" accept=".png, .jpg, .jpeg">
+                        </label>
                     </div>
 
                     <div class="flex justify-end mt-6">

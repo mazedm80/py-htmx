@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 from app import templates
-from app.utils.auth import AuthoToken, Token, get_login_form_creds
+from app.utils.auth import AuthoToken, Token, get_login_form_creds, register_user
 from app.utils.exceptions import UnauthorizedPageException
 
 router = APIRouter()
@@ -34,7 +34,7 @@ async def get_login(
 @router.post(path="/login", summary="Logs into the app", tags=["Authentication"])
 async def post_login(
     auth_token: AuthoToken = Depends(get_login_form_creds),  # get_login_form_creds
-) -> dict:
+) -> HTMLResponse:
     if auth_token:
         response = RedirectResponse("/dashboard", status_code=302)
         response.set_cookie(
@@ -56,11 +56,37 @@ async def post_login(
     tags=["Pages", "Authentication"],
     response_class=HTMLResponse,
 )
-async def get_login(request: Request):
-    context = {
-        "request": request,
-    }
+async def get_register_page(request: Request, error: Optional[Dict] = None):
+    context = {"request": request, "error": error}
     return templates.TemplateResponse("pages/register.html", context)
+
+
+@router.post(path="/register", summary="Registers a new user", tags=["Authentication"])
+async def post_register(
+    register: Dict[str, str] = Depends(register_user),
+) -> HTMLResponse:
+    errors = {}
+    if password != password2:
+        errors["password"] = "Passwords do not match"
+    if not errors:
+        cookie = register_user(
+            name=name,
+            bday=bday,
+            email=email,
+            password=password,
+            role=role,
+        )
+        response = RedirectResponse("/dashboard", status_code=302)
+        response.set_cookie(
+            key=cookie.token_name,
+            value=cookie.access_token,
+            expires=cookie.expires_in,
+            httponly=True,
+            secure=True,
+        )
+    else:
+        response = RedirectResponse("/register?error=True", status_code=302)
+    return response
 
 
 logout = dict(path="/logout", summary="Logs out of the app", tags=["Authentication"])

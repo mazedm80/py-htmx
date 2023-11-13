@@ -18,7 +18,8 @@ router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 )
 async def get_dashboard(
     request: Request,
-    user: Optional[User] = Depends(get_userinfo_for_page),
+    # user: Optional[User] = Depends(get_userinfo_for_page),
+    user: int = 1,
 ):
     title = "Dashboard"
     context = {"request": request, "title": title}
