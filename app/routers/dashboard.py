@@ -1,10 +1,8 @@
-from typing import Optional
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 
 from app import templates
-from app.utils.auth import Token, User, get_userinfo_for_page
 from app.utils.exceptions import UnauthorizedPageException
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
@@ -20,7 +18,7 @@ async def get_dashboard(
     request: Request,
     # user: Optional[User] = Depends(get_userinfo_for_page),
     user: int = 1,
-):
+) -> HTMLResponse:
     title = "Dashboard"
     context = {"request": request, "title": title}
     if not user:

@@ -1,0 +1,21 @@
+<div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
+    <div x-data="{ tab: 'general'}" class="col-span-1">
+        <div class="flex mx-2 mb-4 space-x-4 text-xl border-b border-gray-300">
+            <div hx-get="/restaurant/view/general/{{ data.id }}" hx-target="#tab" hx-swap="innerHTML"
+                class="hover:text-indigo-600 py-2"
+                :class="{'text-indigo-600 border-b border-indigo-600': tab == 'general'}" @click="tab = 'general'">
+                General </div>
+
+            <div hx-get="/restaurant/view/account/{{ data.id }}" hx-target="#tab" hx-swap="innerHTML"
+                class="hover:text-indigo-600 py-2 pl-2"
+                :class="{'text-indigo-600 border-b border-indigo-600': tab == 'account'}" @click="tab = 'account'">
+                Account</div>
+
+            <div class="hover:text-indigo-600 py-2 pl-2"
+                :class="{'text-indigo-600 border-b border-indigo-600': tab == 'settings'}" @click="tab = 'settings'">
+                Settings</div>
+        </div>
+        <div id="tab" hx-get="/restaurant/view/general/{{ data.id }}" hx-trigger="load">
+        </div>
+    </div>
+</div>

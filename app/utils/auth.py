@@ -1,10 +1,10 @@
 from typing import Dict, Optional
 
 import httpx
-from fastapi import Cookie, Depends, Form, Request
+from fastapi import Cookie, Form
 from pydantic import BaseModel, field_validator
 
-from app.utils.exceptions import UnauthorizedException, UnauthorizedPageException
+from app.utils.exceptions import UnauthorizedPageException
 from config.settings import settings
 
 

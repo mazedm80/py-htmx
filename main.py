@@ -1,5 +1,5 @@
-from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.app import app
 from config.settings import settings

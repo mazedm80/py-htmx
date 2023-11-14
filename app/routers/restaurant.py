@@ -1,13 +1,10 @@
 from typing import Optional
 
-import httpx
-from fastapi import APIRouter, Depends, Request, status, Response
+from fastapi import APIRouter, Request, Response, status
 from fastapi.responses import HTMLResponse
 
 from app import templates
-from app.utils.auth import Token, get_userinfo_for_page
 from app.utils.exceptions import UnauthorizedPageException
-from config.settings import settings
 
 router = APIRouter(
     prefix="/restaurant",
@@ -25,6 +22,7 @@ async def get_dashboard(
     request: Request,
     # cookie: Optional[Token] = Depends(get_auth_cookie),
     cookie: int = 1,
+    initial_id: Optional[int] = None,
 ):
     restaurant_list = []
     for i in range(1, 4):
@@ -36,11 +34,17 @@ async def get_dashboard(
                 "phone": "123-456-7890",
                 "email": "abc@abc.com",
                 "website": "https://www.google.com",
-                "image": "https://via.placeholder.com/150",
+                "image": "https://showme.co.za/hartbeespoort/files/2021/10/MCDONALDS_BANNER.png",
             }
         )
     title = "Restaurant"
-    context = {"request": request, "restaurant_list": restaurant_list, "title": title}
+    context = {
+        "request": request,
+        "restaurant_list": restaurant_list,
+        "initial_id": 1,
+        "title": title,
+        "nav_menu": "false",
+    }
     if not cookie:
         raise UnauthorizedPageException()
     return templates.TemplateResponse("pages/restaurant.html", context)
@@ -62,49 +66,71 @@ async def delete_restaurant(
     return Response(status_code=status.HTTP_200_OK)
 
 
-# edit component
+# view component
 @router.get(
-    path="/edit/{restaurant_id}",
+    path="/view/{tab}/{restaurant_id}",
     summary="Open the edit modal for a restaurant.",
     tags=["Restaurant"],
 )
-async def add_update_restaurant_modal_prompt(
+async def view_restaurant_info(
     request: Request,
     restaurant_id: int,
+    tab: str,
     # cookie: Optional[Token] = Depends(get_auth_cookie),
     cookie: int = 1,
 ):
     if not cookie:
         raise UnauthorizedPageException()
-    if restaurant_id == 0:
-        restaurant = {
-            "id": "",
-            "name": "",
-            "address": "",
-            "phone": "",
-            "email": "",
-            "website": "",
-            "image": "",
-        }
-        properties = {
-            "title": "Add Restaurant",
-            "description": "Add your restaurant to the list.",
-        }
-    else:
-        restaurant = {
+    if tab == "general" or tab == "complete":
+        data = {
             "id": restaurant_id,
             "name": f"Restaurant{restaurant_id}",
             "address": "1234 Main St.",
             "phone": "123-456-7890",
-            "email": "abc@abc.com",
+            "email": f"abc_{restaurant_id}@gmail.com",
+            "website": "https://www.google.com",
+            "image": "https://showme.co.za/hartbeespoort/files/2021/10/MCDONALDS_BANNER.png",
+        }
+    elif tab == "account":
+        data = {
+            "tax_rate": 15.0,
+            "tax_included": True,
+            "monthly_target": 10000.0,
+        }
+    context = {"request": request, "data": data}
+    return templates.TemplateResponse(f"partials/restaurant/view_{tab}.html", context)
+
+
+# edit component
+@router.get(
+    path="/edit/{tab}/{restaurant_id}",
+    summary="Open the edit modal for a restaurant.",
+    tags=["Restaurant"],
+)
+async def edit_restaurant_info(
+    request: Request,
+    restaurant_id: int,
+    tab: str,
+    # cookie: Optional[Token] = Depends(get_auth_cookie),
+    cookie: int = 1,
+):
+    if not cookie:
+        raise UnauthorizedPageException()
+    if tab == "general":
+        data = {
+            "id": restaurant_id,
+            "name": f"Restaurant{restaurant_id}",
+            "address": "1234 Main St.",
+            "phone": "123-456-7890",
+            "email": f"abc_{restaurant_id}@gmail.com",
             "website": "https://www.google.com",
             "image": "https://via.placeholder.com/150",
         }
-        properties = {
-            "title": "Edit Restaurant info",
-            "description": "Edit your restaurant information.",
+    elif tab == "account":
+        data = {
+            "tax_rate": 15.0,
+            "tax_included": True,
+            "monthly_target": 10000.0,
         }
-    context = {"request": request, "restaurant": restaurant, "properties": properties}
-    return templates.TemplateResponse(
-        "partials/restaurant/restaurant_edit.html", context
-    )
+    context = {"request": request, "data": data}
+    return templates.TemplateResponse(f"partials/restaurant/edit_{tab}.html", context)

@@ -1,12 +1,12 @@
 [tool.isort]
 profile = "black"
-src_paths = ["app", "tests"]
+src_paths = ["app", "config", "tests"]
 skip_gitignore = true
 skip_glob = ["*pb2.py"]
 
 [tool.ruff]
 fix = true
-src = ["api", "config", "core", "tests"]
+src = ["app", "config", "tests"]
 
 [tool.poetry]
 name = "py-htmx"

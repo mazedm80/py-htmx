@@ -1,0 +1,42 @@
+<h2 class="text-lg font-medium text-gray-700 capitalize sm:text-xl md:text-2xl">General information</h2>
+<form>
+    <div class="grid grid-cols-2 gap-4">
+        {% with id='name', name='restaurant name', value=data.name|e %}
+        {% include "components/form/text.html" %}
+        {% endwith %}
+
+        {% with id='address', name='restaurant address', value=data.address|e %}
+        {% include "components/form/text.html" %}
+        {% endwith %}
+    </div>
+    <div class="grid grid-cols-3 gap-4">
+        {% with id='phone', name='restaurant phone', value=data.phone|e %}
+        {% include "components/form/phone.html" %}
+        {% endwith %}
+
+        {% with id='email', name='restaurant email', value=data.email|e %}
+        {% include "components/form/email.html" %}
+        {% endwith %}
+
+        {% with id='website', name='restaurant website', value=data.website|e %}
+        {% include "components/form/url.html" %}
+        {% endwith %}
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+        {% with id='facebook', name='restaurant facebook', value=data.facebook|e %}
+        {% include "components/form/url.html" %}
+        {% endwith %}
+    </div>
+
+    <div>
+        {% include "components/form/upload_image.html" %}
+    </div>
+
+    <div class="flex justify-start mt-6">
+        <button hx-get="/restaurant/view/complete/{{ data.id|e }}" hx-target="#restaurant-info" hx-swap="innerHTML"
+            type="button"
+            class="px-3 py-2 w-24 tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
+            save
+        </button>
+    </div>
+</form>

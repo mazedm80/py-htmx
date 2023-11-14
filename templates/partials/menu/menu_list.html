@@ -1,0 +1,58 @@
+<div class="flex flex-col mt-8">
+    <div class="-my-2 overflow-x-auto xl:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <div class="overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                        <tr>
+                            <th scope="col"
+                                class="px-6 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                            </th>
+
+                            <th scope="col"
+                                class="px-6 py-3 pr-16 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                                Name
+                            </th>
+
+                            <th scope="col"
+                                class="px-6 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                                Category
+                            </th>
+
+                            <th scope="col"
+                                class="px-6 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                                Price
+                            </th>
+
+                            <th scope="col"
+                                class="px-6 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                                Status
+                            </th>
+
+                            <th scope="col"
+                                class="px-6 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                                Portion size
+                            </th>
+
+                            <th scope="col"
+                                class="px-6 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                                Spicy
+                            </th>
+
+                            <th scope="col"
+                                class="px-6 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody hx-confirm="Are you sure?" hx-target="closest tr" hx-swap="outerHTML swap:1s"
+                        class="bg-white divide-y divide-gray-200">
+                        {% for menu in menu_list %}
+                        {% include "partials/menu/menu_row.html" %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+<tr data-id="{{ menu.id }}">
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+        <div class="flex items-center">
+            <div class="flex-shrink-0 w-10 h-10">
+                <img class="w-10 h-10 rounded-full" src="{{ menu.image }}" alt="">
+            </div>
+        </div>
+    </td>
+
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+        {{ menu.name }}
+    </td>
+
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+        {{ menu.menu_category }}
+    </td>
+
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+        {{ menu.price }}
+    </td>
+
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+        {% if menu.status%}
+        <div class="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
+            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+
+            <h2 class="text-sm font-normal text-emerald-500">Available</h2>
+        </div>
+        {% else %}
+        <div class="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-red-100/60 dark:bg-gray-800">
+            <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>
+
+            <h2 class="text-sm font-normal text-red-500">Unavailable</h2>
+        </div>
+        {% endif %}
+    </td>
+
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+        {{ menu.portion_size }}
+    </td>
+
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+        {{ menu.spicy }}
+    </td>
+
+    <td class="px-6 py-4 whitespace-nowrap"></td>
+
+    <td class="px-6 py-4 whitespace-nowrap">
+        <div class="flex items-center">
+            <button hx-get="/restaurant/edit/{{ menu.id }}" hx-target="#edit-modal" hx-swap="innerHTML"
+                hx-trigger="click" hx-confirm="unset"
+                class="mx-4 text-gray-500 focus:outline-none hover:text-indigo-500">
+                <i class="fa-regular fa-pen-to-square text-xl"></i>
+            </button>
+
+            <button id="delete" hx-delete="/restaurant/{{ menu.id }}"
+                class="text-gray-500 focus:outline-none hover:text-indigo-500">
+                <i class="fa-regular fa-trash-can text-xl"></i>
+            </button>
+        </div>
+    </td>
+</tr>

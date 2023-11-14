@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Dict, Optional
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -33,7 +33,7 @@ async def get_login(
 
 @router.post(path="/login", summary="Logs into the app", tags=["Authentication"])
 async def post_login(
-    auth_token: AuthoToken = Depends(get_login_form_creds),  # get_login_form_creds
+    auth_token: AuthoToken = Depends(get_login_form_creds),
 ) -> HTMLResponse:
     if auth_token:
         response = RedirectResponse("/dashboard", status_code=302)
@@ -46,7 +46,6 @@ async def post_login(
         )
     else:
         response = RedirectResponse("/login?invalid=True", status_code=302)
-
     return response
 
 

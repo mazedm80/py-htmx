@@ -1,0 +1,39 @@
+<h2 class="text-lg font-medium text-gray-700 capitalize sm:text-xl md:text-2xl">General information</h2>
+<div class="grid grid-cols-2 gap-4">
+    {% with value=data.name|e, name='restaurant name' %}
+    {% include "components/view/text_block.html" %}
+    {% endwith %}
+
+    {% with value=data.address|e, name='restaurant address' %}
+    {% include "components/view/text_block.html" %}
+    {% endwith %}
+</div>
+<div class="grid grid-cols-3 gap-4">
+    {% with value=data.phone|e, name='restaurant phone' %}
+    {% include "components/view/text_block.html" %}
+    {% endwith %}
+
+    {% with value=data.email|e, name='restaurant email' %}
+    {% include "components/view/text_block.html" %}
+    {% endwith %}
+
+    {% with value=data.website|e, name='restaurant website' %}
+    {% include "components/view/text_block.html" %}
+    {% endwith %}
+</div>
+<div class="grid grid-cols-2 gap-4">
+    {% with value=data.facebook|e, name='restaurant facebook' %}
+    {% include "components/view/text_block.html" %}
+    {% endwith %}
+</div>
+<div>
+    <p class="block text-sm text-gray-700 capitalize">image</p>
+    <img class="h-auto max-w-md" src="{{ data.image|e }}" alt="">
+</div>
+
+<div class="flex justify-start mt-6">
+    <button hx-get="/restaurant/edit/general/{{ data.id }}" hx-target="#tab" hx-swap="innerHTML" type="button"
+        class="px-3 py-2 w-24 tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
+        Edit
+    </button>
+</div>

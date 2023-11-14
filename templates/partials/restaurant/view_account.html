@@ -1,0 +1,23 @@
+<h2 class="text-lg font-medium text-gray-700 capitalize sm:text-xl md:text-2xl">Account information</h2>
+<form>
+    <div class="relative mt-4">
+        <label for="tax-rate" class="block text-sm text-gray-700 capitalize">Tax rate</label>
+        <input value="{{ data.tax_rate }}" type="number" name="tax-rate"
+            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+    </div>
+
+    <div class="relative mt-4">
+        <label for="monthly_target" class="block text-sm text-gray-700 capitalize">Monthly target</label>
+        <input value="{{ data.monthly_target }}" type="number" name="monthly_target"
+            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+    </div>
+
+
+
+    <div class="flex justify-start mt-6">
+        <button type="button"
+            class="px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
+            save
+        </button>
+    </div>
+</form>
