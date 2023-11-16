@@ -1,19 +1,20 @@
 <div class="mt-6">
-    <div class="grid grid-cols-1 gap-6 sm:grid-cols-3 xl:grid-cols-3">
-        <div class="col-span-2">
-            <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
-                {% include "partials/section_header.html" %}
-                <!-- Menu list -->
-                {% include "partials/menu/menu_list.html" %}
-                <!-- restaurant view grid -->
+    <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
+        <div class="space-y-3 sm:flex sm:items-start sm:space-y-0 sm:justify-between">
+            <h2 class="text-lg font-medium text-gray-700 capitalize sm:text-xl md:text-2xl">{{ title }}</h2>
+            <div>
+                <a href="/menu/add">
+                    <button
+                        class="flex items-center justify-center px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
+                        <i class="fa-solid fa-plus"></i>
+
+                        <span class="mx-1.5">Add {{ title }}</span>
+                    </button>
+                </a>
             </div>
         </div>
-        <div class="col-span-1">
-            <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
-                {% with title='Categories' %}
-                {% include "partials/section_header.html" %}
-                {% endwith %}
-            </div>
-        </div>
+        <!-- Menu list -->
+        <div id="menu_list" hx-get="/menu/data" hx-trigger="load"></div>
+        <!-- restaurant view grid -->
     </div>
 </div>

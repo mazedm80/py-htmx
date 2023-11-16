@@ -1,5 +1,5 @@
 <div class="mt-6">
-    <form action="/login" method="post">
+    <form action="/menu/data" method="post">
         <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
             <div class="sm:flex sm:items-start sm:space-y-0 sm:justify-between">
                 <h2 class="text-xl font-medium text-gray-700">Add a new item</h2>
@@ -19,11 +19,11 @@
                 <!-- General block -->
                 <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
                     <h2 class="text-lg mb-4 text-gray-700">Product Information</h2>
-                    {% with id='name', name='product name' %}
+                    {% with id='name', name='product name', required='required' %}
                     {% include "components/form/text.html" %}
                     {% endwith %}
                     <div class="grid grid-cols-3 gap-4 mt-3">
-                        {% with id='price', name='price' %}
+                        {% with id='price', name='price', required='required' %}
                         {% include "components/form/number.html" %}
                         {% endwith %}
                         <div id="menu-categories" hx-get="/menu/category/dropdown" hx-trigger="load"></div>
@@ -49,11 +49,11 @@
                 <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
                     <h2 class="text-xl mb-4 text-gray-700">Additional Information</h2>
                     <div class="grid grid-cols-2 gap-4">
-                        {% with id='time', name='average making time' %}
+                        {% with id='making_time', name='average making time', required='required'%}
                         {% include "components/form/time.html" %}
                         {% endwith %}
 
-                        {% with id='spicy', name='spice level' ,options=['Mild','Medium','Hot','Extra'] %}
+                        {% with id='spice_level', name='spice level' ,options=['Mild','Medium','Hot','Extra'] %}
                         {% include "components/form/dropdown.html" %}
                         {% endwith %}
                     </div>

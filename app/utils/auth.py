@@ -39,6 +39,12 @@ class User(BaseModel):
     auth_group: int
 
 
+class UserSession(BaseModel):
+    """User session schema."""
+
+    user_session: str
+
+
 def create_cookie(
     token: Token,
     remember_me: bool = False,
@@ -112,3 +118,9 @@ def get_userinfo_for_page(user_session: Optional[str] = Cookie(default=None)) ->
             return User.model_validate(user)
         else:
             raise UnauthorizedPageException()
+
+
+def get_user_session(user_session: Optional[str] = Cookie(default=None)) -> UserSession:
+    if not user_session:
+        raise UnauthorizedPageException()
+    return UserSession(user_session=user_session)

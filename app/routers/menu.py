@@ -1,10 +1,14 @@
 from typing import Optional
 
-from fastapi import APIRouter, Request
-from fastapi.responses import HTMLResponse
+import httpx
+from fastapi import APIRouter, Depends, Request
+from fastapi.responses import HTMLResponse, RedirectResponse
 
 from app import templates
+from app.services.menu import get_menu_form_creds
+from app.utils.auth import User, UserSession, get_user_session, get_userinfo_for_page
 from app.utils.exceptions import UnauthorizedPageException
+from config.settings import settings
 
 router = APIRouter(
     prefix="/menu",
@@ -12,6 +16,7 @@ router = APIRouter(
 )
 
 
+# Menu page routers
 # Menu page
 @router.get(
     path="",
@@ -21,38 +26,12 @@ router = APIRouter(
 )
 async def get_menu_page(
     request: Request,
-    # cookie: Optional[Token] = Depends(get_auth_cookie),
-    cookie: int = 1,
-    initial_id: Optional[int] = None,
+    user: Optional[User] = Depends(get_userinfo_for_page),
 ):
-    menu_list = []
-    for i in range(1, 10):
-        menu_list.append(
-            {
-                "id": i,
-                "restaurant_id": i + 10,
-                "menu_category": "Burgers",
-                "name": f"Menu{i}",
-                "description": "This is a description.",
-                "price": 10 + i,
-                "status": False,
-                "image": "https://pngfre.com/wp-content/uploads/Burger-45-300x278.png",
-                "vegetarian": True,
-                "vegan": False,
-                "gluten_free": True,
-                "spicy": False,
-            }
-        )
-    title = "Menu List"
-    context = {
-        "request": request,
-        "menu_list": menu_list,
-        "initial_id": 1,
-        "title": title,
-        "nav_menu": "true",
-    }
-    if not cookie:
+    if not user:
         raise UnauthorizedPageException()
+    title = "menu"
+    context = {"request": request, "title": title, "nav_menu": "true"}
     return templates.TemplateResponse("pages/menu.html", context)
 
 
@@ -67,8 +46,7 @@ async def get_add_menu_page(
     request: Request,
     # cookie: Optional[Token] = Depends(get_auth_cookie),
     cookie: int = 1,
-    initial_id: Optional[int] = None,
-):
+) -> HTMLResponse:
     title = "Add Menu"
     context = {
         "request": request,
@@ -79,6 +57,48 @@ async def get_add_menu_page(
     if not cookie:
         raise UnauthorizedPageException()
     return templates.TemplateResponse("pages/menu_add.html", context)
+
+
+# Menu data router
+# Get menu data
+@router.get(
+    path="/data",
+    summary="Gets the menu data.",
+    tags=["Pages"],
+    response_class=HTMLResponse,
+)
+async def get_menu_data(
+    request: Request,
+    session: Optional[UserSession] = Depends(get_user_session),
+) -> HTMLResponse:
+    with httpx.Client() as client:
+        try:
+            response = client.get(
+                f"{settings.api_host}/menu",
+                headers={"Authorization": f"Bearer {session.user_session}"},
+            )
+            response.raise_for_status()
+            menu_list = response.json()["menu_items"]
+        except httpx.HTTPError as e:
+            print(e)
+            menu_list = []
+    context = {"request": request, "menu_list": menu_list}
+    return templates.TemplateResponse("partials/menu/menu_list.html", context)
+
+
+# Add menu data
+@router.post(
+    path="/data",
+    summary="Adds the menu data.",
+    tags=["Pages"],
+    response_class=HTMLResponse,
+)
+async def add_menu_data(
+    status_code: int = Depends(get_menu_form_creds),
+) -> HTMLResponse:
+    # if status_code != 201:
+    #     raise UnauthorizedPageException()
+    return RedirectResponse(url="/menu", status_code=303)
 
 
 # Get item category list dropdown

@@ -1,26 +1,26 @@
-<tr data-id="{{ menu.id }}">
+<tr data-id="{{ menu.id|e }}">
     <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
         <div class="flex items-center">
             <div class="flex-shrink-0 w-10 h-10">
-                <img class="w-10 h-10 rounded-full" src="{{ menu.image }}" alt="">
+                <img class="w-10 h-10 rounded-full" src="{{ menu.image|e }}" alt="">
             </div>
         </div>
     </td>
 
     <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
-        {{ menu.name }}
+        {{ menu.name|e }}
     </td>
 
     <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
-        {{ menu.menu_category }}
+        {{ menu.menu_category_name|e }}
     </td>
 
     <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
-        {{ menu.price }}
+        {{ menu.price|e }}
     </td>
 
     <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
-        {% if menu.status%}
+        {% if menu.status|e%}
         <div class="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
             <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
 
@@ -36,14 +36,24 @@
     </td>
 
     <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
-        {{ menu.portion_size }}
+        {{ menu.making_time|e }}
     </td>
 
     <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
-        {{ menu.spicy }}
+        {{ menu.spice_level|e }}
     </td>
 
-    <td class="px-6 py-4 whitespace-nowrap"></td>
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+        {{ menu.vegetarian|e }}
+    </td>
+
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+        {{ menu.vegan|e }}
+    </td>
+
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+        {{ menu.gluten_free|e }}
+    </td>
 
     <td class="px-6 py-4 whitespace-nowrap">
         <div class="flex items-center">
