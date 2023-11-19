@@ -1,5 +1,5 @@
 <div class="mt-6">
-    <form action="/menu/data/add" method="post">
+    <form action="/menu/data/edit/{{item.id}}" method="post">
         <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
             <div class="sm:flex sm:items-start sm:space-y-0 sm:justify-between">
                 <h2 class="text-xl font-medium text-gray-700">Add a new item</h2>
@@ -25,11 +25,11 @@
                 <!-- General block -->
                 <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
                     <h2 class="text-lg mb-4 text-gray-700">Product Information</h2>
-                    {% with id='name', name='product name', required='required' %}
+                    {% with id='name', name='product name', value=item.name|e, required='required' %}
                     {% include "components/form/text.html" %}
                     {% endwith %}
                     <div class="grid grid-cols-3 gap-4 mt-3">
-                        {% with id='price', name='price', required='required' %}
+                        {% with id='price', name='price', value=item.price|e, required='required' %}
                         {% include "components/form/number.html" %}
                         {% endwith %}
                         <div id="menu-categories" hx-get="/menu/category/dropdown" hx-trigger="load"></div>
@@ -41,7 +41,7 @@
                             </button>
                         </div>
                     </div>
-                    {% with id='description', name='product description' %}
+                    {% with id='description', value=item.description|e, name='product description' %}
                     {% include "components/form/textarea.html" %}
                     {% endwith %}
                 </div>
@@ -51,38 +51,84 @@
                 <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
                     <h2 class="text-xl mb-4 text-gray-700">Additional Information</h2>
                     <div class="grid grid-cols-2 gap-4">
-                        {% with id='making_time', name='average making time', required='required'%}
+                        {% with id='making_time', name='average making time', value=item.making_time|e,
+                        required='required'%}
                         {% include "components/form/number.html" %}
                         {% endwith %}
 
-                        {% with id='spice_level', name='spice level' ,options=['Mild','Medium','Hot','Extra'] %}
+                        {% if item.spice_level == 'mild' %}
+                        {% with id='spice_level', name='spice level',
+                        options=['Mild','Medium','Hot','Extra'] %}
                         {% include "components/form/dropdown.html" %}
                         {% endwith %}
+                        {% elif item.spice_level == 'medium' %}
+                        {% with id='spice_level', name='spice level',
+                        options=['Medium','Mild','Hot','Extra'] %}
+                        {% include "components/form/dropdown.html" %}
+                        {% endwith %}
+                        {% elif item.spice_level == 'hot' %}
+                        {% with id='spice_level', name='spice level',
+                        options=['Hot','Mild','Medium','Extra'] %}
+                        {% include "components/form/dropdown.html" %}
+                        {% endwith %}
+                        {% else %}
+                        {% with id='spice_level', name='spice level',
+                        options=['Extra','Mild','Medium','Hot'] %}
+                        {% include "components/form/dropdown.html" %}
+                        {% endwith %}
+                        {% endif %}
                     </div>
                     <div class="grid grid-cols-3 gap-4">
-                        {% with id='vegetarian', name='vegetarian' ,options=['No','Yes'] %}
+                        {%if item.vegetarian == True %}
+                        {% with id='vegetarian', name='vegetarian', options=['Yes','No'] %}
                         {% include "components/form/dropdown.html" %}
                         {% endwith %}
+                        {% else %}
+                        {% with id='vegetarian', name='vegetarian', options=['No','yes'] %}
+                        {% include "components/form/dropdown.html" %}
+                        {% endwith %}
+                        {% endif %}
 
-                        {% with id='vegan', name='vegan' ,options=['No','Yes'] %}
+                        {% if item.vegan == True %}
+                        {% with id='vegan', name='vegan', options=['Yes','No'] %}
                         {% include "components/form/dropdown.html" %}
                         {% endwith %}
+                        {% else %}
+                        {% with id='vegan', name='vegan', options=['No','Yes'] %}
+                        {% include "components/form/dropdown.html" %}
+                        {% endwith %}
+                        {% endif %}
 
-                        {% with id='gluten_free', name='gluten free' ,options=['Yes','No'] %}
+                        {% if item.gluten_free == True %}
+                        {% with id='gluten_free', name='gluten free', options=['Yes','No'] %}
                         {% include "components/form/dropdown.html" %}
                         {% endwith %}
+                        {% else %}
+                        {% with id='gluten_free', name='gluten free', options=['No','Yes'] %}
+                        {% include "components/form/dropdown.html" %}
+                        {% endwith %}
+                        {% endif %}
                     </div>
                 </div>
                 <!-- Prining block -->
                 <div class="p-4 mt-6 bg-white rounded-lg shadow-sm xl:p-8">
                     <h2 class="text-xl mb-4 text-gray-700">Pricing information</h2>
                     <div class="grid grid-cols-2 gap-4">
-                        {% with name='discount' %}
+                        {% with name='discount', value=item.discount|e %}
                         {% include "components/form/number.html" %}
                         {% endwith %}
-                        {% with id='status', name='product availability' ,options=['Available','Unavailable'] %}
+
+                        {% if item.status == True %}
+                        {% with id='status', name='product availability',
+                        options=['Available','Unavailable'] %}
                         {% include "components/form/dropdown.html" %}
                         {% endwith %}
+                        {% else %}
+                        {% with id='status', name='product availability',
+                        options=['Unavailable','Available'] %}
+                        {% include "components/form/dropdown.html" %}
+                        {% endwith %}
+                        {% endif %}
                     </div>
                 </div>
             </div>

@@ -1,0 +1,86 @@
+<div class="mt-6">
+    <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
+        <div class="sm:flex sm:items-start sm:space-y-0 sm:justify-between">
+            <h2 class="text-xl font-medium text-gray-700">Add a new item</h2>
+            <div>
+                <a href="/menu/edit/{{item.id|e}}">
+                    <button
+                        class="flex items-center justify-center px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
+                        <i class="fa-solid fa-plus"></i>
+
+                        <span class="mx-1.5">Edit Menu</span>
+                    </button>
+                </a>
+                <div id="edit-modal"></div>
+            </div>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-4 xl:grid-cols-4">
+        <div class="col-span-1">
+            <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
+                <h2 class="text-lg mb-4 text-gray-700">Image</h2>
+                <img class="h-auto max-w-lg mx-auto" src="{{item.image|e}}" alt="image description">
+            </div>
+        </div>
+        <div class="col-span-2">
+            <!-- General block -->
+            <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
+                <h2 class="text-lg mb-4 text-gray-700">Product Information</h2>
+                {% with value=item.name|e, name='product name' %}
+                {% include "components/view/text_block.html" %}
+                {% endwith %}
+                <div class="grid grid-cols-3 gap-4 mt-3">
+                    {% with value=item.price|e, name='product price' %}
+                    {% include "components/view/text_block.html" %}
+                    {% endwith %}
+                    {% with value=item.menu_category_name|e, name='product category' %}
+                    {% include "components/view/text_block.html" %}
+                    {% endwith %}
+                </div>
+                {% with value=item.description|e, name='product description' %}
+                {% include "components/view/text_block.html" %}
+                {% endwith %}
+            </div>
+        </div>
+        <div class="col-span-1">
+            <!-- Additional block -->
+            <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
+                <h2 class="text-xl mb-4 text-gray-700">Additional Information</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    {% with value=item.making_time|e, name='average making time' %}
+                    {% include "components/view/text_block.html" %}
+                    {% endwith %}
+
+                    {% with value=item.spice_level|e, name='spice level' %}
+                    {% include "components/view/text_block.html" %}
+                    {% endwith %}
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    {% with value=item.vegetarian|e, name='vegetarian' %}
+                    {% include "components/view/text_block.html" %}
+                    {% endwith %}
+
+                    {% with value=item.vegan|e, name='vegan' %}
+                    {% include "components/view/text_block.html" %}
+                    {% endwith %}
+
+                    {% with value=item.gluten_free|e, name='gluten free' %}
+                    {% include "components/view/text_block.html" %}
+                    {% endwith %}
+                </div>
+            </div>
+            <!-- Prining block -->
+            <div class="p-4 mt-6 bg-white rounded-lg shadow-sm xl:p-8">
+                <h2 class="text-xl mb-4 text-gray-700">Pricing information</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    {% with value=item.discount|e, name='discount' %}
+                    {% include "components/view/text_block.html" %}
+                    {% endwith %}
+                    {% with value=item.status|e, name='product availability' %}
+                    {% include "components/view/text_block.html" %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

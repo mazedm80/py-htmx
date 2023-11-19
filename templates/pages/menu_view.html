@@ -1,0 +1,13 @@
+{% extends "pages/base.html" %}
+{% block navbar %}
+{% include "components/navbar.html" %}
+{% endblock %}
+{% block header %}
+{% include "components/header.html" %}
+{% endblock %}
+{% block content %}
+<div class="px-4 py-8 sm:px-6">
+    {% include "components/breadcrumbs.html" %}
+    {% include "partials/menu/view_menu.html" %}
+</div>
+{% endblock %}
