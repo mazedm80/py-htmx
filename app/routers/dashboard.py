@@ -21,8 +21,12 @@ async def get_dashboard(
     user: Optional[User] = Depends(get_userinfo_for_page),
 ) -> HTMLResponse:
     title = "dashboard"
-    context = {"request": request, "title": title}
     if not user:
         raise UnauthorizedPageException()
-    print(user)
+    context = {
+        "request": request,
+        "title": title,
+        "user": user,
+        "nav_menu": "false",
+    }
     return templates.TemplateResponse("pages/dashboard.html", context)

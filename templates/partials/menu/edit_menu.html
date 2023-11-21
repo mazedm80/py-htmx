@@ -56,58 +56,23 @@
                         {% include "components/form/number.html" %}
                         {% endwith %}
 
-                        {% if item.spice_level == 'mild' %}
-                        {% with id='spice_level', name='spice level',
-                        options=['Mild','Medium','Hot','Extra'] %}
+                        {% with id='spice_level', name='spice level', value=item.spice_level|e,
+                        options=['mild','medium','hot','extra'] %}
                         {% include "components/form/dropdown.html" %}
                         {% endwith %}
-                        {% elif item.spice_level == 'medium' %}
-                        {% with id='spice_level', name='spice level',
-                        options=['Medium','Mild','Hot','Extra'] %}
-                        {% include "components/form/dropdown.html" %}
-                        {% endwith %}
-                        {% elif item.spice_level == 'hot' %}
-                        {% with id='spice_level', name='spice level',
-                        options=['Hot','Mild','Medium','Extra'] %}
-                        {% include "components/form/dropdown.html" %}
-                        {% endwith %}
-                        {% else %}
-                        {% with id='spice_level', name='spice level',
-                        options=['Extra','Mild','Medium','Hot'] %}
-                        {% include "components/form/dropdown.html" %}
-                        {% endwith %}
-                        {% endif %}
                     </div>
                     <div class="grid grid-cols-3 gap-4">
-                        {%if item.vegetarian == True %}
-                        {% with id='vegetarian', name='vegetarian', options=['Yes','No'] %}
+                        {% with id='vegetarian', name='vegetarian', value=item.vegetarian|e, options=['yes','no'] %}
                         {% include "components/form/dropdown.html" %}
                         {% endwith %}
-                        {% else %}
-                        {% with id='vegetarian', name='vegetarian', options=['No','yes'] %}
-                        {% include "components/form/dropdown.html" %}
-                        {% endwith %}
-                        {% endif %}
 
-                        {% if item.vegan == True %}
-                        {% with id='vegan', name='vegan', options=['Yes','No'] %}
+                        {% with id='vegan', name='vegan', value=item.vegan|e, options=['yes','no'] %}
                         {% include "components/form/dropdown.html" %}
                         {% endwith %}
-                        {% else %}
-                        {% with id='vegan', name='vegan', options=['No','Yes'] %}
-                        {% include "components/form/dropdown.html" %}
-                        {% endwith %}
-                        {% endif %}
 
-                        {% if item.gluten_free == True %}
-                        {% with id='gluten_free', name='gluten free', options=['Yes','No'] %}
+                        {% with id='gluten_free', name='gluten free', value=item.gluten_free|e, options=['yes','no'] %}
                         {% include "components/form/dropdown.html" %}
                         {% endwith %}
-                        {% else %}
-                        {% with id='gluten_free', name='gluten free', options=['No','Yes'] %}
-                        {% include "components/form/dropdown.html" %}
-                        {% endwith %}
-                        {% endif %}
                     </div>
                 </div>
                 <!-- Prining block -->
@@ -118,17 +83,10 @@
                         {% include "components/form/number.html" %}
                         {% endwith %}
 
-                        {% if item.status == True %}
-                        {% with id='status', name='product availability',
-                        options=['Available','Unavailable'] %}
+                        {% with id='status', name='product availability', value=item.status|e,
+                        options=['available','unavailable'] %}
                         {% include "components/form/dropdown.html" %}
                         {% endwith %}
-                        {% else %}
-                        {% with id='status', name='product availability',
-                        options=['Unavailable','Available'] %}
-                        {% include "components/form/dropdown.html" %}
-                        {% endwith %}
-                        {% endif %}
                     </div>
                 </div>
             </div>

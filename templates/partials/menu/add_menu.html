@@ -10,7 +10,6 @@
 
                         <span class="mx-1.5">Save</span>
                     </button>
-                    <div id="edit-modal"></div>
                 </div>
             </div>
         </div>
@@ -34,11 +33,13 @@
                         {% endwith %}
                         <div id="menu-categories" hx-get="/menu/category/dropdown" hx-trigger="load"></div>
                         <div class="mt-10">
-                            <button
+                            <button hx-get="/menu/category/add" hx-target="#category_modal" hx-swap="innerHTML"
+                                hx-trigger="click"
                                 class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 ">
                                 <i class="fa-solid fa-plus"></i>
                                 <span class="mx-1.5">Add Category</span>
                             </button>
+                            <div id="category_modal"></div>
                         </div>
                     </div>
                     {% with id='description', name='product description' %}

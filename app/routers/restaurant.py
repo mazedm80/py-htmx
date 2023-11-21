@@ -1,9 +1,10 @@
 from typing import Optional
 
-from fastapi import APIRouter, Request, Response, status
+from fastapi import APIRouter, Request, Response, status, Depends
 from fastapi.responses import HTMLResponse
 
 from app import templates
+from app.utils.auth import User, get_userinfo_for_page
 from app.utils.exceptions import UnauthorizedPageException
 
 router = APIRouter(
@@ -20,9 +21,7 @@ router = APIRouter(
 )
 async def get_dashboard(
     request: Request,
-    # cookie: Optional[Token] = Depends(get_auth_cookie),
-    cookie: int = 1,
-    initial_id: Optional[int] = None,
+    user: Optional[User] = Depends(get_userinfo_for_page),
 ):
     restaurant_list = []
     for i in range(1, 4):
@@ -43,9 +42,10 @@ async def get_dashboard(
         "restaurant_list": restaurant_list,
         "initial_id": 1,
         "title": title,
+        "user": user,
         "nav_menu": "false",
     }
-    if not cookie:
+    if not user:
         raise UnauthorizedPageException()
     return templates.TemplateResponse("pages/restaurant.html", context)
 

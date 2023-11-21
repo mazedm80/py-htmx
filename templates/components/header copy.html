@@ -23,6 +23,55 @@
                         class="w-32 h-10 py-2 pl-10 pr-4 text-gray-700 placeholder-gray-400 transition-all duration-150 bg-white border border-gray-200 rounded-md focus:w-44 sm:w-64 sm:focus:w-80 focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
                         placeholder="Find anything...">
                 </div>
+
+                <div class="absolute right-0 z-20 w-full py-2 mt-2 space-y-4 overflow-hidden bg-white rounded-md shadow-xl"
+                    x-show="search.length > 0" x-transition:enter="transition ease-out duration-100 transform"
+                    x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-75 transform"
+                    x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                    style="display: none;">
+                    <div>
+                        <h3 class="px-5 text-xs tracking-wider text-gray-500 uppercase">Accounts</h3>
+
+                        <div class="mt-2">
+                            <a class="block px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 transform sm:px-12 hover:text-gray-600 hover:bg-gray-100 bg-opacity-40"
+                                href="/preview/premium-dashboard/">
+                                Esther Howard
+                            </a>
+
+                            <a class="block px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 transform sm:px-12 hover:text-gray-600 hover:bg-gray-100 bg-opacity-40"
+                                href="/preview/premium-dashboard/">
+                                Cameron Williamson
+                            </a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="px-5 text-xs tracking-wider text-gray-500 uppercase">projects</h3>
+
+                        <div class="mt-2">
+                            <a class="block px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 transform sm:px-12 hover:text-gray-600 hover:bg-gray-100 bg-opacity-40"
+                                href="/preview/premium-dashboard/">
+                                Minimalist
+                            </a>
+
+                            <a class="block px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 transform sm:px-12 hover:text-gray-600 hover:bg-gray-100 bg-opacity-40"
+                                href="/preview/premium-dashboard/">
+                                Scandinavian
+                            </a>
+
+                            <a class="block px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 transform sm:px-12 hover:text-gray-600 hover:bg-gray-100 bg-opacity-40"
+                                href="/preview/premium-dashboard/">
+                                Classic
+                            </a>
+
+                            <a class="block px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 transform sm:px-12 hover:text-gray-600 hover:bg-gray-100 bg-opacity-40"
+                                href="/preview/premium-dashboard/">
+                                Modern
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -48,13 +97,35 @@
                         <h4 class="text-lg font-medium text-gray-700 capitalize">notifications</h4>
                         <button class="text-sm text-indigo-600 hover:underline focus:outline-none">Clear all</button>
                     </div>
+
+                    <div class="py-2 divide-y divide-gray-100">
+                        <a href="#"
+                            class="flex px-4 py-3 -mx-2 transition-colors duration-200 transform hover:bg-gray-50">
+                            <p class="mx-2 text-sm text-gray-600 truncate"><span class="font-bold" href="#">Modern
+                                </span> Project updated . 11m</p>
+                        </a>
+
+                        <a href="#"
+                            class="flex px-4 py-3 -mx-2 transition-colors duration-200 transform hover:bg-gray-50">
+                            <p class="mx-2 text-sm text-gray-600 truncate"><span class="font-bold" href="#">Slick
+                                    Net</span> start following you . 45m</p>
+                        </a>
+
+                        <a href="#"
+                            class="flex px-4 py-3 -mx-2 transition-colors duration-200 transform hover:bg-gray-50">
+                            <p class="mx-2 text-sm text-gray-600 truncate"><span class="font-bold" href="#">Abigail
+                                    Bennett</span> create new project . 3h</p>
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <div x-data="{ dropdownOpen: false }" class="relative inline-block">
                 <button @click="dropdownOpen = ! dropdownOpen"
                     class="relative z-10 flex items-center flex-shrink-0 text-sm text-gray-600 focus:outline-none">
-                    <i class="fa-regular fa-circle-user text-3xl"></i>
+                    <img class="flex-shrink-0 object-cover w-8 h-8 rounded-full"
+                        src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=880&amp;q=80"
+                        alt="john avatar">
                 </button>
 
                 <div class="absolute right-0 z-20 w-56 py-2 mt-2 overflow-hidden bg-white rounded-md shadow-xl rtl:right-auto rtl:left-0"
@@ -63,27 +134,30 @@
                     x-transition:leave="transition ease-in duration-75 transform"
                     x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
                     @click.away="dropdownOpen = false" style="display: none;">
-                    <a href="#"
+                    <a href="/preview/premium-dashboard/profile"
                         class="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform hover:bg-gray-100">
+                        <img class="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
+                            src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=880&amp;q=80"
+                            alt="john avatar">
                         <div class="mx-1">
-                            <h1 class="text-sm font-semibold text-gray-700">{{user.name|e}}</h1>
-                            <p class="text-sm text-gray-500">{{user.email|e}}</p>
+                            <h1 class="text-sm font-semibold text-gray-700">John Doe</h1>
+                            <p class="text-sm text-gray-500">johndoe@example.com</p>
                         </div>
                     </a>
 
                     <hr class="border-gray-200 ">
 
-                    <a href="#"
+                    <a href="/preview/premium-dashboard/profile"
                         class="block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-200 transform hover:bg-gray-100">
                         Profile
                     </a>
 
-                    <a href="#"
+                    <a href="/preview/premium-dashboard/profile"
                         class="block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-200 transform hover:bg-gray-100">
                         Settings
                     </a>
 
-                    <a href="/logout"
+                    <a href="/preview/premium-dashboard/sign-in"
                         class="block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-200 transform hover:bg-gray-100">
                         Sign Out
                     </a>

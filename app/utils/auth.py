@@ -109,14 +109,18 @@ def get_userinfo_for_page(user_session: Optional[str] = Cookie(default=None)) ->
     if not user_session:
         raise UnauthorizedPageException()
     with httpx.Client() as client:
-        response = client.get(
-            f"{settings.api_host}/auth/me",
-            headers={"Authorization": f"Bearer {user_session}"},
-        )
-        if response.status_code == 200:
-            user = response.json()
-            return User.model_validate(user)
-        else:
+        try:
+            response = client.get(
+                f"{settings.api_host}/auth/me",
+                headers={"Authorization": f"Bearer {user_session}"},
+            )
+            response.raise_for_status()
+            if response.status_code == 200:
+                user = response.json()
+                return User.model_validate(user)
+            else:
+                raise UnauthorizedPageException()
+        except httpx.HTTPError:
             raise UnauthorizedPageException()
 
 

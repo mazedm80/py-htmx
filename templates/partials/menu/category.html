@@ -1,0 +1,107 @@
+<div class="mt-6">
+    <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
+        <div class="space-y-3 sm:flex sm:items-start sm:space-y-0 sm:justify-between">
+            <h2 class="text-lg font-medium text-gray-700 capitalize sm:text-xl md:text-2xl">{{ title }}</h2>
+            <div>
+                <button hx-get="/menu/category/add" hx-target="#category_modal" hx-swap="innerHTML" hx-trigger="click"
+                    class="flex items-center justify-center px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
+                    <i class="fa-solid fa-plus"></i>
+
+                    <span class="mx-1.5">Add {{ title }}</span>
+                </button>
+                <div id="category_modal"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mt-6">
+    <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-5 xl:grid-cols-5">
+        {% if categories %}
+        <div class="col-span-2">
+            <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
+                <div class="flex flex-col mt-8">
+                    <div class="-my-2 overflow-x-auto xl:-mx-8">
+                        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                            <div class="overflow-hidden">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                                            </th>
+
+                                            <th scope="col"
+                                                class="px-6 py-3 pr-16 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                                                Name
+                                            </th>
+
+                                            <th scope="col"
+                                                class="px-6 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                                                Description
+                                            </th>
+
+                                            <th scope="col"
+                                                class="px-6 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                                                Action
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody hx-confirm="Are you sure?" hx-target="closest tr" hx-swap="outerHTML swap:1s"
+                                        class="bg-white divide-y divide-gray-200">
+                                        {% for category in categories %}
+                                        <tr data-id="{{ category.id|e }}">
+                                            <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <div class="flex-shrink-0 w-10 h-10">
+                                                        <img class="w-10 h-10 rounded-full" src="{{ category.image|e }}"
+                                                            alt="">
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+                                                {{ category.name|e }}
+                                            </td>
+
+                                            <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+                                                {{ category.description|e }}
+                                            </td>
+
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <a href="/menu/view/{{ category.id }}">
+                                                        <button hx-confirm="unset"
+                                                            class="text-gray-500 focus:outline-none hover:text-indigo-500">
+                                                            <i class="fa-solid fa-eye"></i>
+                                                        </button>
+                                                    </a>
+                                                    <a href="/menu/edit/{{ category.id }}">
+                                                        <button hx-get="/menu/edit/{{ category.id }}"
+                                                            hx-target="#edit-modal" hx-swap="innerHTML"
+                                                            hx-trigger="click" hx-confirm="unset"
+                                                            class="mx-4 text-gray-500 focus:outline-none hover:text-indigo-500">
+                                                            <i class="fa-regular fa-pen-to-square text-xl"></i>
+                                                        </button>
+                                                    </a>
+                                                    <button id="delete" hx-delete="/menu/{{ category.id }}"
+                                                        class="text-gray-500 focus:outline-none hover:text-indigo-500">
+                                                        <i class="fa-regular fa-trash-can text-xl"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="col-span-2"></div>
+        <div class="col-span-2"></div>
+    </div>
+</div>

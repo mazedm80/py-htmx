@@ -1,9 +1,8 @@
-from typing import Optional
+from typing import Optional, List, Dict
 
 import httpx
-from fastapi import Depends, Form
+from fastapi import Form
 
-from app.utils.auth import UserSession, get_user_session
 from config.settings import settings
 
 
@@ -19,7 +18,7 @@ def get_menu_form_creds(
     status: str = Form(),
 ) -> dict:
     image = "https://pngfre.com/wp-content/uploads/Burger-43.png"
-    status = True if status == "Available" else False
+    status = True if status == "available" else False
     data = {
         "menu_category_id": 1,
         "name": name,
@@ -36,6 +35,36 @@ def get_menu_form_creds(
     return data
 
 
+def get_menu_category_form_creds(
+    name: str = Form(),
+    description: Optional[str] = Form(default=None),
+) -> dict:
+    image = "https://pngfre.com/wp-content/uploads/Burger-43.png"
+    data = {
+        "name": name,
+        "description": description,
+        "image": str(image),
+    }
+    return data
+
+
+async def get_menu_items(
+    user_session: str,
+) -> List:
+    with httpx.Client() as client:
+        try:
+            response = client.get(
+                f"{settings.api_host}/menu",
+                headers={"Authorization": f"Bearer {user_session}"},
+            )
+            response.raise_for_status()
+            menu_list = response.json()["menu_items"]
+        except httpx.HTTPError as e:
+            print(e)
+            menu_list = []
+    return menu_list
+
+
 async def get_menu_item(
     menu_id: int,
     user_session: str,
@@ -49,6 +78,22 @@ async def get_menu_item(
             )
             response.raise_for_status()
             item = response.json()["menu_items"][0]
+            if item.get("vegetarian"):
+                item["vegetarian"] = "yes"
+            else:
+                item["vegetarian"] = "no"
+            if item.get("vegan"):
+                item["vegan"] = "yes"
+            else:
+                item["vegan"] = "no"
+            if item.get("gluten_free"):
+                item["gluten_free"] = "yes"
+            else:
+                item["gluten_free"] = "no"
+            if item.get("status"):
+                item["status"] = "available"
+            else:
+                item["status"] = "unavailable"
         except httpx.HTTPError as e:
             item = {}
     return item
@@ -100,6 +145,104 @@ async def delete_menu_item(
                 f"{settings.api_host}/menu",
                 headers={"Authorization": f"Bearer {user_session}"},
                 params={"menu_id": menu_id},
+            )
+            response.raise_for_status()
+        except httpx.HTTPError as e:
+            response = None
+    return response.status_code
+
+
+async def get_menu_categories(
+    user_session: str,
+) -> List[Dict]:
+    with httpx.Client() as client:
+        try:
+            response = client.get(
+                f"{settings.api_host}/menu/categories",
+                headers={"Authorization": f"Bearer {user_session}"},
+            )
+            response.raise_for_status()
+            menu_categories = response.json()["menu_categories"]
+            options = []
+            for category in menu_categories:
+                options.append(
+                    {
+                        "value": category["id"],
+                        "name": category["name"],
+                        "description": category["description"],
+                        "image": category["image"],
+                    }
+                )
+        except httpx.HTTPError as e:
+            print(e)
+            options = []
+    return options
+
+
+async def get_menu_category(
+    category_id: int,
+    user_session: str,
+) -> dict:
+    with httpx.Client() as client:
+        try:
+            response = client.get(
+                f"{settings.api_host}/menu/category",
+                headers={"Authorization": f"Bearer {user_session}"},
+                params={"category_id": category_id},
+            )
+            response.raise_for_status()
+            menu_category = response.json()
+        except httpx.HTTPError as e:
+            menu_category = {}
+    return menu_category
+
+
+async def add_menu_category(
+    data: dict,
+    user_session: str,
+) -> int:
+    with httpx.Client() as client:
+        try:
+            response = client.post(
+                f"{settings.api_host}/menu/category",
+                headers={"Authorization": f"Bearer {user_session}"},
+                json=data,
+            )
+            response.raise_for_status()
+        except httpx.HTTPError as e:
+            response = None
+    return response.status_code
+
+
+async def update_menu_category(
+    data: dict,
+    category_id: int,
+    user_session: str,
+) -> int:
+    with httpx.Client() as client:
+        try:
+            data["id"] = category_id
+            response = client.put(
+                f"{settings.api_host}/menu/category",
+                headers={"Authorization": f"Bearer {user_session}"},
+                json=data,
+            )
+            response.raise_for_status()
+        except httpx.HTTPError as e:
+            response = None
+    return response.status_code
+
+
+async def delete_menu_category(
+    category_id: int,
+    user_session: str,
+) -> int:
+    with httpx.Client() as client:
+        try:
+            response = client.delete(
+                f"{settings.api_host}/menu/category",
+                headers={"Authorization": f"Bearer {user_session}"},
+                params={"category_id": category_id},
             )
             response.raise_for_status()
         except httpx.HTTPError as e:

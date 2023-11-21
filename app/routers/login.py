@@ -4,7 +4,13 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 from app import templates
-from app.utils.auth import AuthoToken, Token, get_login_form_creds, register_user
+from app.utils.auth import (
+    AuthoToken,
+    Token,
+    get_login_form_creds,
+    register_user,
+    get_user_session,
+)
 from app.utils.exceptions import UnauthorizedPageException
 
 router = APIRouter()
@@ -93,10 +99,10 @@ logout = dict(path="/logout", summary="Logs out of the app", tags=["Authenticati
 
 @router.get(**logout)
 @router.post(**logout)
-async def post_login(cookie: Optional[Token] = Depends(get_login_form_creds)) -> dict:
-    if not cookie:
+async def post_login(user_session: Optional[Token] = Depends(get_user_session)) -> dict:
+    if not user_session:
         raise UnauthorizedPageException()
 
     response = RedirectResponse("/login?logged_out=True", status_code=302)
-    response.set_cookie(key=cookie.name, value=cookie.token, expires=-1)
+    response.set_cookie(key="user_session", value="", expires=-1)
     return response

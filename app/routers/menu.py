@@ -7,7 +7,14 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from app import templates
 from app.services.menu import (
     get_menu_form_creds,
+    get_menu_category_form_creds,
+    get_menu_categories,
+    get_menu_category,
+    add_menu_category,
+    update_menu_category,
+    delete_menu_category,
     get_menu_item,
+    get_menu_items,
     add_menu_item,
     update_menu_item,
     delete_menu_item,
@@ -33,11 +40,16 @@ router = APIRouter(
 async def get_menu_page(
     request: Request,
     user: Optional[User] = Depends(get_userinfo_for_page),
+    session: Optional[UserSession] = Depends(get_user_session),
 ):
-    if not user:
-        raise UnauthorizedPageException()
-    title = "menu"
-    context = {"request": request, "title": title, "nav_menu": "true"}
+    menu_list = await get_menu_items(user_session=session.user_session)
+    title = "Menu"
+    context = {
+        "request": request,
+        "title": title,
+        "user": user,
+        "menu_list": menu_list,
+    }
     return templates.TemplateResponse("pages/menu.html", context)
 
 
@@ -50,18 +62,10 @@ async def get_menu_page(
 )
 async def get_add_menu_page(
     request: Request,
-    # cookie: Optional[Token] = Depends(get_auth_cookie),
-    cookie: int = 1,
+    user: Optional[User] = Depends(get_userinfo_for_page),
 ) -> HTMLResponse:
     title = "Add Menu"
-    context = {
-        "request": request,
-        "initial_id": 1,
-        "title": title,
-        "nav_menu": "true",
-    }
-    if not cookie:
-        raise UnauthorizedPageException()
+    context = {"request": request, "title": title, "user": user}
     return templates.TemplateResponse("pages/menu_add.html", context)
 
 
@@ -70,16 +74,17 @@ async def get_add_menu_page(
     path="/view/{menu_id}",
     summary="Gets the menu item view page.",
     tags=["Pages"],
-    response_class=RedirectResponse,
+    response_class=HTMLResponse,
 )
 async def get_view_menu_page(
     menu_id: int,
     request: Request,
+    user: Optional[User] = Depends(get_userinfo_for_page),
     session: Optional[UserSession] = Depends(get_user_session),
 ) -> HTMLResponse:
     item = await get_menu_item(menu_id=menu_id, user_session=session.user_session)
     title = "View Menu"
-    context = {"request": request, "item": item, "title": title, "nav_menu": "true"}
+    context = {"request": request, "item": item, "title": title, "user": user}
     return templates.TemplateResponse("pages/menu_view.html", context)
 
 
@@ -88,17 +93,64 @@ async def get_view_menu_page(
     path="/edit/{menu_id}",
     summary="Gets the menu item edit page.",
     tags=["Pages"],
-    response_class=RedirectResponse,
+    response_class=HTMLResponse,
 )
 async def get_edit_menu_page(
     menu_id: int,
     request: Request,
+    user: Optional[User] = Depends(get_userinfo_for_page),
     session: Optional[UserSession] = Depends(get_user_session),
 ) -> HTMLResponse:
     item = await get_menu_item(menu_id=menu_id, user_session=session.user_session)
     title = "Edit Menu"
-    context = {"request": request, "item": item, "title": title, "nav_menu": "true"}
+    context = {
+        "request": request,
+        "item": item,
+        "title": title,
+        "user": user,
+    }
     return templates.TemplateResponse("pages/menu_edit.html", context)
+
+
+# Category list page
+@router.get(
+    path="/category",
+    summary="Gets the item category list page.",
+    tags=["Pages"],
+    response_class=HTMLResponse,
+)
+async def get_category_list_page(
+    request: Request,
+    user: Optional[User] = Depends(get_userinfo_for_page),
+    session: Optional[UserSession] = Depends(get_user_session),
+) -> HTMLResponse:
+    name = "Category List"
+    title = "Category"
+    categories = await get_menu_categories(user_session=session.user_session)
+    context = {
+        "request": request,
+        "name": name,
+        "user": user,
+        "title": title,
+        "categories": categories,
+    }
+    return templates.TemplateResponse("pages/menu_category.html", context)
+
+
+# Get item category add modal page
+@router.get(
+    path="/category/add",
+    summary="Gets the item category add modal.",
+    tags=["Pages"],
+    response_class=HTMLResponse,
+)
+async def get_add_category_page(
+    request: Request,
+):
+    title = "category"
+    info = "Add a new category"
+    context = {"request": request, "title": title, "info": info}
+    return templates.TemplateResponse("partials/menu/category_add.html", context)
 
 
 # Menu data router
@@ -182,24 +234,31 @@ async def delete_menu_data(
 # Get item category list dropdown
 @router.get(
     path="/category/dropdown",
-    summary="Gets the item category list page.",
+    summary="Gets the item category list dropdown.",
     tags=["Pages"],
     response_class=HTMLResponse,
 )
 async def get_options_page(
     request: Request,
-    cookie: int = 1,
+    session: Optional[UserSession] = Depends(get_user_session),
 ):
-    options = []
-    for i in range(1, 10):
-        options.append(f"Category{i}")
-    name = "Product Category List"
-    context = {
-        "request": request,
-        "options": options,
-        "id": "menu_category",
-        "name": name,
-    }
-    if not cookie:
-        raise UnauthorizedPageException()
-    return templates.TemplateResponse("components/form/dropdown.html", context)
+    options = await get_menu_categories(user_session=session.user_session)
+    name = "Category"
+    context = {"request": request, "name": name, "options": options}
+    return templates.TemplateResponse("partials/menu/category_list.html", context)
+
+
+# Post item category
+@router.post(
+    path="/category",
+    summary="Adds the item category.",
+    tags=["Pages"],
+    response_class=RedirectResponse,
+)
+async def add_category_data(
+    data: dict = Depends(get_menu_category_form_creds),
+    session: Optional[UserSession] = Depends(get_user_session),
+) -> RedirectResponse:
+    status_code = await add_menu_category(data=data, user_session=session.user_session)
+    if status_code == 200:
+        return RedirectResponse(url="/menu/category", status_code=303)
