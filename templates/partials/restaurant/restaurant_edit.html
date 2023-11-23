@@ -16,7 +16,7 @@
                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 class="inline-block w-full max-w-xl p-8 my-20 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl rtl:text-right 2xl:max-w-2xl">
                 <div class="flex items-center justify-between">
-                    <h1 class="text-xl font-medium text-gray-800 ">{{ title }}</h1>
+                    <h1 class="text-xl font-medium text-gray-800 capitalize">{{ title }}</h1>
 
                     <button @click="modelOpenedit = false" class="text-gray-600 focus:outline-none hover:text-gray-700">
                         <i class="fa-solid fa-xmark"></i>
@@ -26,55 +26,58 @@
                 <p class="mt-2 text-sm text-gray-500 ">
                     {{ info }}
                 </p>
+                {% if restaurant.id %}
+                <form action="/restaurant/data/edit/{{ restaurant.id|e }}" method="post">
+                    {% else %}
+                    <form action="/restaurant/data/add" method="post">
+                        {% endif %}
+                        {% with id='name', name='restaurant name', value=restaurant.name|e, required='required' %}
+                        {% include "components/form/text.html" %}
+                        {% endwith %}
 
-                <form>
-                    <div class="relative mt-4">
-                        <label for="name" class="block text-sm text-gray-700 capitalize">Restaurant name</label>
-                        <input value="" type="text" name="name"
-                            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
-                    </div>
+                        {% with id='address', name='restaurant address', value=restaurant.address|e, required='required'
+                        %}
+                        {% include "components/form/text.html" %}
+                        {% endwith %}
 
-                    <div class="relative mt-4">
-                        <label for="address" class="block text-sm text-gray-700 capitalize">Restaurant address</label>
-                        <input value="" type="text" name="address"
-                            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
-                    </div>
+                        {% with id='phone', name='restaurant phone number', value=restaurant.phone|e,
+                        required='required' %}
+                        {% include "components/form/phone.html" %}
+                        {% endwith %}
 
-                    <div class="relative mt-4">
-                        <label for="phone" class="block text-sm text-gray-700 capitalize">Restaurant phone</label>
-                        <input value="" type="text" name="phone"
-                            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
-                    </div>
+                        {% with id='email', name='restaurant email address', value=restaurant.email|e, required='' %}
+                        {% include "components/form/email.html" %}
+                        {% endwith %}
 
-                    <div class="relative mt-4">
-                        <label for="email" class="block text-sm text-gray-700 capitalize">Restaurant email</label>
-                        <input value="" type="email" name="email"
-                            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
-                    </div>
+                        {% with id='website', name='restaurant website', value=restaurant.website|e, required='' %}
+                        {% include "components/form/url.html" %}
+                        {% endwith %}
 
-                    <div class="relative mt-4">
-                        <label for="website" class="block text-sm text-gray-700 capitalize">Restaurant website</label>
-                        <input value="" type="text" name="website"
-                            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
-                    </div>
+                        <div id="image">
+                            {% if restaurant.image %}
+                            <div
+                                class="flex-col w-64 items-center justify-center mt-2 p-4 border-2 rounded-md bg-gray-100">
+                                <div class="flex justify-end">
+                                    <button id="delete" hx-get="/restaurant/image" hx-trigger="click" hx-target="#image"
+                                        hx-swap="outerHTML"
+                                        class="text-gray-500 focus:outline-none hover:text-indigo-500">
+                                        <i class="fa-regular fa-trash-can text-xl"></i>
+                                    </button>
+                                </div>
+                                <img class="max-w-full" src="{{restaurant.image|e}}" alt="image description">
+                            </div>
+                            {% else %}
+                            {% include "components/form/upload_image.html" %}
+                            {% endif %}
+                        </div>
 
-                    <div>
-                        <label for="image" class="block text-sm text-gray-700 capitalize">image</label>
-                        <label
-                            class="flex flex-col items-center justify-center w-full h-32 mt-2 text-gray-500 border-2 border-dashed rounded-md cursor-pointer hover:text-gray-600 md:h-44">
-                            <i class="fa-solid fa-cloud-arrow-up"></i>
-                            <span class="mt-4">Select Image</span>
-                            <input id="upload" type="file" class="hidden" accept=".png, .jpg, .jpeg">
-                        </label>
-                    </div>
-
-                    <div class="flex justify-end mt-6">
-                        <button type="button"
-                            class="px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
-                            Invite Member
-                        </button>
-                    </div>
-                </form>
+                        <div class="flex justify-end mt-6">
+                            <button type="submit"
+                                class="px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
+                                Save
+                            </button>
+                        </div>
+                    </form>
             </div>
         </div>
     </div>

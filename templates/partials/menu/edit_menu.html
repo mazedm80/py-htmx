@@ -15,10 +15,25 @@
             </div>
         </div>
         <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-4 xl:grid-cols-4">
-            <div class="col-span-1">
+            <div hx-confirm="Are you sure?" hx-target="#delete" class="col-span-1">
                 <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
                     <h2 class="text-lg mb-4 text-gray-700">Image</h2>
-                    {% include "components/form/upload_image.html" %}
+                    <div id="image">
+                        {% if item.image %}
+                        <div
+                            class="flex-col w-full items-center justify-center mt-2 p-4 border-2 rounded-md bg-gray-100">
+                            <div class="flex justify-end">
+                                <button id="delete" hx-get="/menu/image" hx-trigger="click" hx-target="#image"
+                                    hx-swap="outerHTML" class="text-gray-500 focus:outline-none hover:text-indigo-500">
+                                    <i class="fa-regular fa-trash-can text-xl"></i>
+                                </button>
+                            </div>
+                            <img class="max-w-full" src="{{item.image|e}}" alt="image description">
+                        </div>
+                        {% else %}
+                        {% include "components/form/upload_image.html" %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
             <div class="col-span-2">

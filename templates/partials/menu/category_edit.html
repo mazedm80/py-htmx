@@ -26,24 +26,43 @@
                 <p class="mt-2 text-sm text-gray-500 ">
                     {{ info }}
                 </p>
+                {% if category.id %}
+                <form action="/menu/category/edit/{{ category.id|e }}" method="post">
+                    {% else %}
+                    <form action="/menu/category" method="post">
+                        {% endif %}
+                        {% with id='name', name='category name', value=category.name|e, required='required' %}
+                        {% include "components/form/text.html" %}
+                        {% endwith %}
 
-                <form action="/menu/category" method="post">
-                    {% with id='name', name='category name', value=category.name|e, required='required' %}
-                    {% include "components/form/text.html" %}
-                    {% endwith %}
+                        {% with id='description', name='category description', value=category.description|e %}
+                        {% include "components/form/textarea.html" %}
+                        {% endwith %}
 
-                    {% with id='description', name='category description', value=item.description|e %}
-                    {% include "components/form/textarea.html" %}
-                    {% endwith %}
-
-                    {% include "components/form/upload_image.html" %}
-                    <div class="flex justify-end mt-6">
-                        <button type="submit"
-                            class="px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
-                            Add
-                        </button>
-                    </div>
-                </form>
+                        <div id="image">
+                            {% if category.image %}
+                            <div
+                                class="flex-col w-64 items-center justify-center mt-2 p-4 border-2 rounded-md bg-gray-100">
+                                <div class="flex justify-end">
+                                    <button id="delete" hx-get="/menu/image" hx-trigger="click" hx-target="#image"
+                                        hx-swap="outerHTML"
+                                        class="text-gray-500 focus:outline-none hover:text-indigo-500">
+                                        <i class="fa-regular fa-trash-can text-xl"></i>
+                                    </button>
+                                </div>
+                                <img class="max-w-full" src="{{category.image|e}}" alt="image description">
+                            </div>
+                            {% else %}
+                            {% include "components/form/upload_image.html" %}
+                            {% endif %}
+                        </div>
+                        <div class="flex justify-end mt-6">
+                            <button type="submit"
+                                class="px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
+                                Save
+                            </button>
+                        </div>
+                    </form>
             </div>
         </div>
     </div>

@@ -14,17 +14,59 @@
         </div>
     </div>
 </div>
-{% if restaurant_list %}
+{% if restaurants %}
 <div class="mt-6">
-    <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
-        {% include "partials/restaurant/items.html" %}
-    </div>
-</div>
-<div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-3 xl:grid-cols-3">
-    <div class="col-span-2">
-        <div id="restaurant-info" class="mt-6">
+    <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-5 xl:grid-cols-5">
+        <div class="col-span-1 sm:col-start-2 sm:col-end-5 xl:col-start-2 xl:col-end-5">
+            <div class="p-4 bg-white rounded-lg shadow-sm xl:p-8">
+                <div class="flex flex-col mt-8">
+                    <div class="my-2 overflow-x-auto xl:-mx-8">
+                        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                            <div class="overflow-hidden">
+                                <table
+                                    class="table-auto min-w-full divide-y divide-gray-200 sm:table-fixed xl:table-fixed">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                                            </th>
+
+                                            <th scope="col"
+                                                class="px-6 py-3 pr-16 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                                                Name
+                                            </th>
+
+                                            <th scope="col"
+                                                class="px-6 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                                                Address
+
+                                            </th>
+
+                                            <th scope="col"
+                                                class="px-6 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                                                Phone
+                                            </th>
+
+                                            <th scope="col"
+                                                class="px-6 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase rtl:text-right whitespace-nowrap">
+                                                Action
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody hx-confirm="Are you sure?" hx-target="closest tr" hx-swap="outerHTML swap:1s"
+                                        class="bg-white divide-y divide-gray-200">
+                                        {% for restaurant in restaurants %}
+                                        {% include "partials/restaurant/restaurant_row.html" %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-span-1 bg-green-600 h-96"> 2 / 3</div>
 </div>
 {% endif %}

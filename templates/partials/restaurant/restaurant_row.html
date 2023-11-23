@@ -1,41 +1,38 @@
 <tr data-id="{{ restaurant.id }}">
     <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
-        {{ restaurant.name }}
+        <div class="flex items-center">
+            <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-gray-100">
+                <img class="w-10 h-10 rounded-full" src="{{ restaurant.image|e }}" alt="">
+            </div>
+        </div>
     </td>
 
     <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
-        {{ restaurant.address }}
+        {{ restaurant.name|e }}
     </td>
 
     <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
-        {{ restaurant.phone }}
+        {{ restaurant.address|e }}
     </td>
 
     <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
-        {{ restaurant.email }}
+        {{ restaurant.phone|e }}
     </td>
-
-    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
-        {{ restaurant.website }}
-    </td>
-
-    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
-        {{ restaurant.image }}
-    </td>
-    <td class="px-6 py-4 whitespace-nowrap"></td>
 
     <td class="px-6 py-4 whitespace-nowrap">
-        <div class="flex items-center">
-            <button hx-get="/restaurant/edit/{{ restaurant.id }}" hx-target="#edit-modal" hx-swap="innerHTML"
-                hx-trigger="click" hx-confirm="unset"
-                class="mx-4 text-gray-500 focus:outline-none hover:text-indigo-500">
-                <i class="fa-regular fa-pen-to-square text-xl"></i>
+        <a href="">
+            <button hx-confirm="unset" class="text-gray-500 focus:outline-none hover:text-indigo-500">
+                <i class="fa-solid fa-eye"></i>
             </button>
-
-            <button id="delete" hx-delete="/restaurant/{{ restaurant.id }}"
-                class="text-gray-500 focus:outline-none hover:text-indigo-500">
-                <i class="fa-regular fa-trash-can text-xl"></i>
-            </button>
-        </div>
+        </a>
+        <button hx-get="/{{ title }}/add?restaurant_id={{ restaurant.id|e }}" hx-target="#edit-modal"
+            hx-swap="innerHTML" hx-trigger="click" hx-confirm="unset"
+            class="mx-4 text-gray-500 focus:outline-none hover:text-indigo-500">
+            <i class="fa-regular fa-pen-to-square text-xl"></i>
+        </button>
+        <button id="delete" hx-delete="/restaurant/{{ restaurant.id|e }}"
+            class="text-gray-500 focus:outline-none hover:text-indigo-500">
+            <i class="fa-regular fa-trash-can text-xl"></i>
+        </button>
     </td>
 </tr>

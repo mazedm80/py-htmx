@@ -43,7 +43,7 @@ async def get_menu_page(
     session: Optional[UserSession] = Depends(get_user_session),
 ):
     menu_list = await get_menu_items(user_session=session.user_session)
-    title = "Menu"
+    title = "menu"
     context = {
         "request": request,
         "title": title,
@@ -64,7 +64,7 @@ async def get_add_menu_page(
     request: Request,
     user: Optional[User] = Depends(get_userinfo_for_page),
 ) -> HTMLResponse:
-    title = "Add Menu"
+    title = "add menu"
     context = {"request": request, "title": title, "user": user}
     return templates.TemplateResponse("pages/menu_add.html", context)
 
@@ -83,7 +83,7 @@ async def get_view_menu_page(
     session: Optional[UserSession] = Depends(get_user_session),
 ) -> HTMLResponse:
     item = await get_menu_item(menu_id=menu_id, user_session=session.user_session)
-    title = "View Menu"
+    title = "view menu"
     context = {"request": request, "item": item, "title": title, "user": user}
     return templates.TemplateResponse("pages/menu_view.html", context)
 
@@ -102,7 +102,7 @@ async def get_edit_menu_page(
     session: Optional[UserSession] = Depends(get_user_session),
 ) -> HTMLResponse:
     item = await get_menu_item(menu_id=menu_id, user_session=session.user_session)
-    title = "Edit Menu"
+    title = "edit menu"
     context = {
         "request": request,
         "item": item,
@@ -125,7 +125,7 @@ async def get_category_list_page(
     session: Optional[UserSession] = Depends(get_user_session),
 ) -> HTMLResponse:
     name = "Category List"
-    title = "Category"
+    title = "category"
     categories = await get_menu_categories(user_session=session.user_session)
     context = {
         "request": request,
@@ -146,11 +146,26 @@ async def get_category_list_page(
 )
 async def get_add_category_page(
     request: Request,
-):
-    title = "category"
-    info = "Add a new category"
-    context = {"request": request, "title": title, "info": info}
-    return templates.TemplateResponse("partials/menu/category_add.html", context)
+    category_id: Optional[int] = None,
+    user_session: Optional[UserSession] = Depends(get_user_session),
+) -> HTMLResponse:
+    title = "Category"
+    if category_id:
+        category = await get_menu_category(
+            category_id=category_id, user_session=user_session.user_session
+        )
+        info = "Edit the category informaton"
+        context = {
+            "request": request,
+            "title": title,
+            "info": info,
+            "category": category,
+        }
+        return templates.TemplateResponse("partials/menu/category_edit.html", context)
+    else:
+        info = "Add a new category"
+        context = {"request": request, "title": title, "info": info, "category": None}
+        return templates.TemplateResponse("partials/menu/category_edit.html", context)
 
 
 # Menu data router
@@ -231,6 +246,60 @@ async def delete_menu_data(
     return Response(status_code=status_code)
 
 
+# Post item category
+@router.post(
+    path="/category",
+    summary="Adds the item category.",
+    tags=["Pages"],
+    response_class=RedirectResponse,
+)
+async def add_category_data(
+    data: dict = Depends(get_menu_category_form_creds),
+    session: Optional[UserSession] = Depends(get_user_session),
+) -> RedirectResponse:
+    status_code = await add_menu_category(data=data, user_session=session.user_session)
+    if status_code == 200:
+        return RedirectResponse(url="/menu/category", status_code=303)
+
+
+# Edit item category
+@router.post(
+    path="/category/edit/{category_id}",
+    summary="Edits the item category.",
+    tags=["Pages"],
+    response_class=HTMLResponse,
+)
+async def edit_category_data(
+    category_id: int,
+    data: dict = Depends(get_menu_category_form_creds),
+    session: Optional[UserSession] = Depends(get_user_session),
+) -> HTMLResponse:
+    status_code = await update_menu_category(
+        data=data,
+        category_id=category_id,
+        user_session=session.user_session,
+    )
+    if status_code == 200:
+        return RedirectResponse(url="/menu/category", status_code=303)
+
+
+# Delete item category
+@router.delete(
+    path="/category/{category_id}",
+    summary="Deletes the item category.",
+    tags=["Pages"],
+)
+async def delete_category_data(
+    category_id: int,
+    session: Optional[UserSession] = Depends(get_user_session),
+) -> None:
+    status_code = await delete_menu_category(
+        category_id=category_id, user_session=session.user_session
+    )
+    return Response(status_code=status_code)
+
+
+# Mics routers
 # Get item category list dropdown
 @router.get(
     path="/category/dropdown",
@@ -248,17 +317,15 @@ async def get_options_page(
     return templates.TemplateResponse("partials/menu/category_list.html", context)
 
 
-# Post item category
-@router.post(
-    path="/category",
-    summary="Adds the item category.",
+# Get image upload section
+@router.get(
+    path="/image",
+    summary="Gets the photo upload section.",
     tags=["Pages"],
-    response_class=RedirectResponse,
+    response_class=HTMLResponse,
 )
-async def add_category_data(
-    data: dict = Depends(get_menu_category_form_creds),
-    session: Optional[UserSession] = Depends(get_user_session),
-) -> RedirectResponse:
-    status_code = await add_menu_category(data=data, user_session=session.user_session)
-    if status_code == 200:
-        return RedirectResponse(url="/menu/category", status_code=303)
+async def get_image_upload_page(
+    request: Request,
+) -> HTMLResponse:
+    context = {"request": request}
+    return templates.TemplateResponse("components/form/upload_image.html", context)

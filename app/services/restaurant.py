@@ -1,157 +1,115 @@
-from typing import Optional
+from typing import Optional, List, Dict
 
-from fastapi import APIRouter, Request, Response, status
-from fastapi.responses import HTMLResponse
+import httpx
+from fastapi import Form
 
-from app import templates
-from app.utils.exceptions import UnauthorizedPageException
-
-router = APIRouter(
-    prefix="/restaurant",
-    tags=["restaurant"],
-)
+from config.settings import settings
 
 
-@router.get(
-    path="",
-    summary="Gets the restaurant page.",
-    tags=["Pages"],
-    response_class=HTMLResponse,
-)
-async def get_dashboard(
-    request: Request,
-    # cookie: Optional[Token] = Depends(get_auth_cookie),
-    cookie: int = 1,
-    initial_id: Optional[int] = None,
-):
-    restaurant_list = []
-    for i in range(1, 4):
-        restaurant_list.append(
-            {
-                "id": i,
-                "name": f"Restaurant{i}",
-                "address": "1234 Main St.",
-                "phone": "123-456-7890",
-                "email": "abc@abc.com",
-                "website": "https://www.google.com",
-                "image": "https://showme.co.za/hartbeespoort/files/2021/10/MCDONALDS_BANNER.png",
-            }
-        )
-    title = "restaurant"
-    context = {
-        "request": request,
-        "restaurant_list": restaurant_list,
-        "initial_id": 1,
-        "title": title,
-        "nav_menu": "false",
+def get_restaurant_form_creds(
+    name: str = Form(),
+    address: str = Form(),
+    phone: str = Form(),
+    email: Optional[str] = Form(default=None),
+    website: Optional[str] = Form(default=None),
+    image: Optional[str] = Form(default=None),
+) -> dict:
+    image = "https://marketplace.canva.com/EAFYecj_1Sc/1/0/1600w/canva-cream-and-black-simple-elegant-catering-food-logo-2LPev1tJbrg.jpg"
+
+    data = {
+        "name": name,
+        "address": address,
+        "phone": phone,
+        "email": email,
+        "website": website,
+        "image": image,
     }
-    if not cookie:
-        raise UnauthorizedPageException()
-    return templates.TemplateResponse("pages/restaurant.html", context)
+    return data
 
 
-@router.delete(
-    path="/{restaurant_id}",
-    summary="Deletes a restaurant.",
-    tags=["Restaurant"],
-)
+async def get_restaurants(
+    user_session: str,
+) -> List:
+    with httpx.Client() as client:
+        try:
+            response = client.get(
+                f"{settings.api_host}/restaurant",
+                headers={"Authorization": f"Bearer {user_session}"},
+            )
+            response.raise_for_status()
+            restaurants = response.json()["restaurants"]
+            return restaurants
+        except httpx.HTTPStatusError as exc:
+            return exc.response.status_code
+
+
+async def get_restaurant(
+    restaurant_id: int,
+    user_session: str,
+) -> Dict:
+    with httpx.Client() as client:
+        try:
+            response = client.get(
+                f"{settings.api_host}/restaurant",
+                headers={"Authorization": f"Bearer {user_session}"},
+                params={"restaurant_id": restaurant_id},
+            )
+            response.raise_for_status()
+            restaurant = response.json()["restaurants"][0]
+            return restaurant
+        except httpx.HTTPStatusError as exc:
+            return exc.response.status_code
+
+
+async def add_restaurant(
+    data: dict,
+    user_session: str,
+) -> int:
+    with httpx.Client() as client:
+        try:
+            response = client.post(
+                f"{settings.api_host}/restaurant",
+                headers={"Authorization": f"Bearer {user_session}"},
+                json=data,
+            )
+            response.raise_for_status()
+            return response.status_code
+        except httpx.HTTPStatusError as exc:
+            return exc.response.status_code
+
+
+async def update_restaurant(
+    data: dict,
+    restaurant_id: int,
+    user_session: str,
+) -> int:
+    with httpx.Client() as client:
+        try:
+            data["id"] = restaurant_id
+            print(data)
+            response = client.put(
+                f"{settings.api_host}/restaurant",
+                headers={"Authorization": f"Bearer {user_session}"},
+                json=data,
+            )
+            response.raise_for_status()
+            return response.status_code
+        except httpx.HTTPStatusError as exc:
+            return exc.response.status_code
+
+
 async def delete_restaurant(
     restaurant_id: int,
-    # cookie: Optional[Token] = Depends(get_auth_cookie),
-    cookie: int = 1,
-):
-    if not cookie:
-        raise UnauthorizedPageException()
-    # retuen 204
-    return Response(status_code=status.HTTP_200_OK)
-
-
-# view component
-@router.get(
-    path="/view/{tab}/{restaurant_id}",
-    summary="Open the edit modal for a restaurant.",
-    tags=["Restaurant"],
-)
-async def view_restaurant_info(
-    request: Request,
-    restaurant_id: int,
-    tab: str,
-    # cookie: Optional[Token] = Depends(get_auth_cookie),
-    cookie: int = 1,
-):
-    if not cookie:
-        raise UnauthorizedPageException()
-    if tab == "general" or tab == "complete":
-        data = {
-            "id": restaurant_id,
-            "name": f"Restaurant{restaurant_id}",
-            "address": "1234 Main St.",
-            "phone": "123-456-7890",
-            "email": f"abc_{restaurant_id}@gmail.com",
-            "website": "https://www.google.com",
-            "image": "https://showme.co.za/hartbeespoort/files/2021/10/MCDONALDS_BANNER.png",
-        }
-    elif tab == "account":
-        data = {
-            "tax_rate": 15.0,
-            "tax_included": True,
-            "monthly_target": 10000.0,
-        }
-    context = {"request": request, "data": data}
-    return templates.TemplateResponse(f"partials/restaurant/view_{tab}.html", context)
-
-
-# edit component
-@router.get(
-    path="/edit/{tab}/{restaurant_id}",
-    summary="Open the edit modal for a restaurant.",
-    tags=["Restaurant"],
-)
-async def edit_restaurant_info(
-    request: Request,
-    restaurant_id: int,
-    tab: str,
-    # cookie: Optional[Token] = Depends(get_auth_cookie),
-    cookie: int = 1,
-):
-    if not cookie:
-        raise UnauthorizedPageException()
-    if tab == "general":
-        data = {
-            "id": restaurant_id,
-            "name": f"Restaurant{restaurant_id}",
-            "address": "1234 Main St.",
-            "phone": "123-456-7890",
-            "email": f"abc_{restaurant_id}@gmail.com",
-            "website": "https://www.google.com",
-            "image": "https://via.placeholder.com/150",
-        }
-    elif tab == "account":
-        data = {
-            "tax_rate": 15.0,
-            "tax_included": True,
-            "monthly_target": 10000.0,
-        }
-    context = {"request": request, "data": data}
-    return templates.TemplateResponse(f"partials/restaurant/edit_{tab}.html", context)
-
-
-# add component
-@router.get(
-    path="/add",
-    summary="Open the add modal for a restaurant.",
-    tags=["Restaurant"],
-)
-async def add_restaurant_info(
-    request: Request,
-    # cookie: Optional[Token] = Depends(get_auth_cookie),
-    cookie: int = 1,
-):
-    if not cookie:
-        raise UnauthorizedPageException()
-    title = "restaurant"
-    info = "Add a new restaurant"
-    context = {"request": request, "title": title, "info": info}
-    return templates.TemplateResponse(
-        "partials/restaurant/restaurant_edit.html", context
-    )
+    user_session: str,
+) -> int:
+    with httpx.Client() as client:
+        try:
+            response = client.delete(
+                f"{settings.api_host}/restaurant",
+                headers={"Authorization": f"Bearer {user_session}"},
+                params={"restaurant_id": restaurant_id},
+            )
+            response.raise_for_status()
+            return response.status_code
+        except httpx.HTTPStatusError as exc:
+            return exc.response.status_code

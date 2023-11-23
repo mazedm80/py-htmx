@@ -781,6 +781,22 @@ select {
   grid-column: span 2 / span 2;
 }
 
+.col-start-2 {
+  grid-column-start: 2;
+}
+
+.col-end-3 {
+  grid-column-end: 3;
+}
+
+.col-end-4 {
+  grid-column-end: 4;
+}
+
+.col-end-5 {
+  grid-column-end: 5;
+}
+
 .-mx-2 {
   margin-left: -0.5rem;
   margin-right: -0.5rem;
@@ -1108,6 +1124,10 @@ select {
   flex-basis: 33.333333%;
 }
 
+.table-auto {
+  table-layout: auto;
+}
+
 .-translate-x-full {
   --tw-translate-x: -100%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
@@ -1278,6 +1298,10 @@ select {
   overflow-y: auto;
 }
 
+.overflow-x-scroll {
+  overflow-x: scroll;
+}
+
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1420,6 +1444,11 @@ select {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-gray-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 
 .bg-opacity-40 {
@@ -2065,6 +2094,18 @@ select {
 }
 
 @media (min-width: 640px) {
+  .sm\:fixed {
+    position: fixed;
+  }
+
+  .sm\:col-start-2 {
+    grid-column-start: 2;
+  }
+
+  .sm\:col-end-5 {
+    grid-column-end: 5;
+  }
+
   .sm\:mx-4 {
     margin-left: 1rem;
     margin-right: 1rem;
@@ -2092,6 +2133,10 @@ select {
 
   .sm\:max-w-md {
     max-width: 28rem;
+  }
+
+  .sm\:table-fixed {
+    table-layout: fixed;
   }
 
   .sm\:translate-y-0 {
@@ -2270,6 +2315,18 @@ select {
 }
 
 @media (min-width: 1280px) {
+  .xl\:fixed {
+    position: fixed;
+  }
+
+  .xl\:col-start-2 {
+    grid-column-start: 2;
+  }
+
+  .xl\:col-end-5 {
+    grid-column-end: 5;
+  }
+
   .xl\:-mx-3 {
     margin-left: -0.75rem;
     margin-right: -0.75rem;
@@ -2295,6 +2352,10 @@ select {
 
   .xl\:w-2\/3 {
     width: 66.666667%;
+  }
+
+  .xl\:table-fixed {
+    table-layout: fixed;
   }
 
   .xl\:grid-cols-3 {
