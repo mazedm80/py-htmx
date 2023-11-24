@@ -70,6 +70,10 @@ check-%:
 # Aliases
 .PHONY: i r t cl cs
 
+db: docker-build
+dr: docker-run
+drr: docker-remove
+ds: docker-stop
 i: install
 r: run
 t: test
