@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
-from app.routers import dashboard, login, menu, restaurant, root, pos
+from app.routers import dashboard, login, menu, pos, restaurant, root
 from app.utils.exceptions import NotFoundException, UnauthorizedPageException
 
 app = FastAPI(

@@ -8,8 +8,8 @@ from app.utils.auth import (
     AuthoToken,
     Token,
     get_login_form_creds,
-    register_user,
     get_user_session,
+    register_user,
 )
 from app.utils.exceptions import UnauthorizedPageException
 

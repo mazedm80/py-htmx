@@ -1,4 +1,4 @@
-from typing import Optional, List, Dict
+from typing import Dict, List, Optional
 
 import httpx
 from fastapi import Form
@@ -103,7 +103,7 @@ async def get_menu_item(
                 item["status"] = "available"
             else:
                 item["status"] = "unavailable"
-        except httpx.HTTPError as e:
+        except httpx.HTTPError:
             item = {}
     return item
 
@@ -120,7 +120,7 @@ async def add_menu_item(
                 json=data,
             )
             response.raise_for_status()
-        except httpx.HTTPError as e:
+        except httpx.HTTPError:
             response = None
     return response.status_code
 
@@ -139,7 +139,7 @@ async def update_menu_item(
                 json=data,
             )
             response.raise_for_status()
-        except httpx.HTTPError as e:
+        except httpx.HTTPError:
             response = None
     return response.status_code
 
@@ -156,7 +156,7 @@ async def delete_menu_item(
                 params={"menu_id": menu_id},
             )
             response.raise_for_status()
-        except httpx.HTTPError as e:
+        except httpx.HTTPError:
             response = None
     return response.status_code
 
@@ -201,7 +201,7 @@ async def get_menu_category(
             )
             response.raise_for_status()
             menu_category = response.json()
-        except httpx.HTTPError as e:
+        except httpx.HTTPError:
             menu_category = {}
     return menu_category
 
@@ -218,7 +218,7 @@ async def add_menu_category(
                 json=data,
             )
             response.raise_for_status()
-        except httpx.HTTPError as e:
+        except httpx.HTTPError:
             response = None
     return response.status_code
 
@@ -237,7 +237,7 @@ async def update_menu_category(
                 json=data,
             )
             response.raise_for_status()
-        except httpx.HTTPError as e:
+        except httpx.HTTPError:
             response = None
     return response.status_code
 
@@ -254,6 +254,6 @@ async def delete_menu_category(
                 params={"category_id": category_id},
             )
             response.raise_for_status()
-        except httpx.HTTPError as e:
+        except httpx.HTTPError:
             response = None
     return response.status_code

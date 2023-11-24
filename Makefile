@@ -56,11 +56,6 @@ docker-run: ## Run docker image
 	--restart always \
 	-p 3000:80 \
 	-e MAX_WORKERS=1 \
-	-e PSQL__HOST="mirserver" \
-	-e PSQL__PORT=5432 \
-	-e PSQL__USER="htmx" \
-	-e PSQL__PASSWORD="htmx123" \
-	-e PSQL__DATABASE="pyhtmx" \
 	-d htmx-frontend:latest
 
 

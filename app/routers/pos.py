@@ -1,12 +1,11 @@
 from typing import Optional
 
-from fastapi import APIRouter, Request, Response, status, Depends
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi import APIRouter, Depends, Request
+from fastapi.responses import HTMLResponse
 
 from app import templates
 from app.services.menu import get_menu_categories, get_menu_items
-from app.utils.auth import User, get_userinfo_for_page, UserSession, get_user_session
-from app.utils.exceptions import UnauthorizedPageException
+from app.utils.auth import User, UserSession, get_user_session, get_userinfo_for_page
 
 router = APIRouter(
     prefix="/pos",

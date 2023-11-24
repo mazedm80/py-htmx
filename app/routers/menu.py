@@ -6,21 +6,20 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 
 from app import templates
 from app.services.menu import (
-    get_menu_form_creds,
-    get_menu_category_form_creds,
+    add_menu_category,
+    add_menu_item,
+    delete_menu_category,
+    delete_menu_item,
     get_menu_categories,
     get_menu_category,
-    add_menu_category,
-    update_menu_category,
-    delete_menu_category,
+    get_menu_category_form_creds,
+    get_menu_form_creds,
     get_menu_item,
     get_menu_items,
-    add_menu_item,
+    update_menu_category,
     update_menu_item,
-    delete_menu_item,
 )
 from app.utils.auth import User, UserSession, get_user_session, get_userinfo_for_page
-from app.utils.exceptions import UnauthorizedPageException
 from config.settings import settings
 
 router = APIRouter(

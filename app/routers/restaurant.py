@@ -1,18 +1,18 @@
 from typing import Optional
 
-from fastapi import APIRouter, Request, Response, status, Depends
+from fastapi import APIRouter, Depends, Request, Response
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 from app import templates
 from app.services.restaurant import (
-    get_restaurant_form_creds,
     add_restaurant,
-    update_restaurant,
-    get_restaurant,
-    get_restaurants,
     delete_restaurant,
+    get_restaurant,
+    get_restaurant_form_creds,
+    get_restaurants,
+    update_restaurant,
 )
-from app.utils.auth import User, get_userinfo_for_page, UserSession, get_user_session
+from app.utils.auth import User, UserSession, get_user_session, get_userinfo_for_page
 from app.utils.exceptions import UnauthorizedPageException
 
 router = APIRouter(
