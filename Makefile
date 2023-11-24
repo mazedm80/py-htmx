@@ -1,5 +1,6 @@
 # Targets
 BUILD_NUMBER ?= 0
+DOCKER_IMAGE_NAME ?= "htmx-frontend"
 SHORT_HASH := $(shell git rev-parse --short HEAD)
 SHELL := /bin/bash
 
@@ -39,6 +40,29 @@ env:
 	@source .env/bin/activate \
 		&& pip install -qU pip \
 		&& poetry self add --quiet poetry-bumpversion@latest
+
+docker-build: ## Build docker image
+	@docker build -t ${DOCKER_IMAGE_NAME} --build-arg BUILD_NUMBER=${SHORT_HASH} --no-cache .
+
+docker-stop: ## Stop docker image
+	@docker stop ${DOCKER_IMAGE_NAME}
+
+docker-remove: ## Remove docker image
+	@docker rm -f ${DOCKER_IMAGE_NAME}
+
+docker-run: ## Run docker image
+	@docker run \
+	--name pyhtmx \
+	--restart always \
+	-p 3000:80 \
+	-e MAX_WORKERS=1 \
+	-e PSQL__HOST="mirserver" \
+	-e PSQL__PORT=5432 \
+	-e PSQL__USER="htmx" \
+	-e PSQL__PASSWORD="htmx123" \
+	-e PSQL__DATABASE="pyhtmx" \
+	-d htmx-frontend:latest
+
 
 check-%:
 	@#$(or ${$*}, $(error $* is not set))

@@ -1,0 +1,15 @@
+<div class="flex flex-row h-full overflow-y-auto">
+    <div class="basis-4/6 flex flex-col mx-4 relative">
+        <div class="sticky top-0 z-10 overflow-hidden w-full">
+            {% include "partials/pos/category.html" %}
+        </div>
+        <div class="basis-4/6 flex flex-1 h-full overflow-auto mt-6">
+            <div id="menus" class="relative">
+                {% include "partials/pos/menus.html" %}
+            </div>
+        </div>
+    </div>
+    <div class="basis-2/6 flex flex-col mx-4">
+        {% include "partials/pos/cart.html" %}
+    </div>
+</div>

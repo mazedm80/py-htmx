@@ -8,7 +8,8 @@ class ApiSettings(BaseSettings):
     port: int = 3000
     debug: bool = False
     workers: int = 1
-    api_host: str = "http://127.0.0.1:8000"
+    api_host: str = "http://localhost:5000"
+    # api_host: str = "https://htmx.euro-bangla.eu"
 
     class Config:
         env_prefix = "API_"

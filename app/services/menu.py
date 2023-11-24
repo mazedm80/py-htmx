@@ -50,13 +50,22 @@ def get_menu_category_form_creds(
 
 async def get_menu_items(
     user_session: str,
+    category_id: Optional[int] = None,
 ) -> List:
     with httpx.Client() as client:
+        print(category_id)
         try:
-            response = client.get(
-                f"{settings.api_host}/menu",
-                headers={"Authorization": f"Bearer {user_session}"},
-            )
+            if category_id:
+                response = client.get(
+                    f"{settings.api_host}/menu",
+                    headers={"Authorization": f"Bearer {user_session}"},
+                    params={"category_id": category_id},
+                )
+            else:
+                response = client.get(
+                    f"{settings.api_host}/menu",
+                    headers={"Authorization": f"Bearer {user_session}"},
+                )
             response.raise_for_status()
             menu_list = response.json()["menu_items"]
         except httpx.HTTPError as e:

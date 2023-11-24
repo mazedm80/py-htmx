@@ -48,7 +48,7 @@ async def get_menu_page(
         "request": request,
         "title": title,
         "user": user,
-        "menu_list": menu_list,
+        "menu_list": menu_list * 4,
     }
     return templates.TemplateResponse("pages/menu.html", context)
 

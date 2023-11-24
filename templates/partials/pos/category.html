@@ -1,0 +1,20 @@
+<section x-data="{ selected: 0 }"
+    class="p-4 bg-white rounded-lg shadow-sm text-slate-500 text-base font-medium overflow-x-auto">
+    <div class="flex flex-wrap gap-2">
+        {% for category in categories %}
+        <div class="flex flex-col items-center">
+            <div hx-get="/pos/menu/{{ category.value|e }}" hx-target="#menus" hx-swap="innerHTML" role="button"
+                class="overflow-hidden w-20 h-20 rounded-lg hover:cursor-pointer hover:bg-blue-700"
+                @click="selected = {{ category.value|e }}" :class="{
+                    'bg-gray-100': selected !== {{ category.value|e }},
+                    'bg-blue-700': selected === {{ category.value|e }},
+                  }">
+                <img class="w-15 h-15 rounded-full" src={{ category.image|e }} alt="">
+            </div>
+            <div>
+                <h4 class="">{{ category.name|e }}</h4>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
