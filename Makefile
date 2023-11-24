@@ -52,7 +52,7 @@ docker-remove: ## Remove docker image
 
 docker-run: ## Run docker image
 	@docker run \
-	--name pyhtmx \
+	--name htmx-frontend \
 	--restart always \
 	-p 3000:80 \
 	-e MAX_WORKERS=1 \
