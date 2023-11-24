@@ -65,6 +65,7 @@ def get_login_form_creds(
 ) -> Optional[AuthoToken]:
     cookie = None
     with httpx.Client() as client:
+        print(f"{settings.api_host}/auth/login")
         response = client.post(
             f"{settings.api_host}/auth/login",
             params={"email": email, "password": password},
@@ -72,6 +73,7 @@ def get_login_form_creds(
         if response.status_code == 200:
             token = response.json()
             cookie = Token.model_validate(token)
+            print(cookie)
             cookie = create_cookie(cookie, remember_me=remember_me)
     return cookie
 

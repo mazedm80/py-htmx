@@ -56,6 +56,7 @@ docker-run: ## Run docker image
 	--restart always \
 	-p 3000:80 \
 	-e MAX_WORKERS=1 \
+	-e API_API_URL=http://mirserver:5000 \
 	-d htmx-frontend:latest
 
 
