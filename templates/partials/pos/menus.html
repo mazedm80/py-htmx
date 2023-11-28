@@ -1,15 +1,25 @@
 {% if menus %}
 <section class=" text-slate-500 text-base font-medium">
-    <div class="grid grid-cols-1 gap-2 md:grid-cols-3 xl:grid-cols-4">
+    <div class="grid grid-cols-2 gap-2 md:grid-cols-3 xl:grid-cols-4">
         {% for menu in menus %}
-        <div class="flex flex-col items-center">
-            <div role="button"
-                class="select-none cursor-pointer transition-shadow overflow-hidden rounded-2xl bg-white shadow hover:shadow-lg"
-                title="{{ menu.name|e }}" @click="$store.pos.addToCart({{ menu|e }})">
+        <div role="button" title="{{ menu.name|e }}" x-data @click="addToCart({{ menu|e }})"
+            class="flex flex-col select-none cursor-pointer transition-shadow overflow-hidden rounded-2xl bg-white shadow hover:shadow-lg">
+            <div class="flex flex-row content-evenly px-3 mt-3 ml-3">
+                <i class="fa-solid text-slate-600 fa-stopwatch mt-1"></i>
+                <span class="text-slate-600">: ~{{ menu.making_time|e }} min</span>
+            </div>
+            <div class="align-middle">
                 <img src="{{ menu.image|e }}" alt="{{ menu.name|e }}">
-                <div class="flex pb-3 px-3 -mt-3">
-                    <p class="flex-grow text-sm text-ellipsis overflow-hidden">{{ menu.name|e }}</p>
-                    <p class="font-semibold"> {{ menu.price|e }}</p>
+            </div>
+            <div class="flex flex-grow flex-col pb-3 items-start px-3 -mt-3">
+                <p class="text-base text-ellipsis overflow-hidden">{{ menu.name|e }}</p>
+                <p class="text-sm text-ellipsis font-thin overflow-hidden">{{ menu.description|e }}</p>
+            </div>
+            <div class="flex items-center justify-between divide-x divide-slate-500 pb-3 px-3 -mt-3">
+                <p class="basis-1/2 text-xl font-thin px-3"> {{ "৳%.2f"|format(menu.price) }}</p>
+                <div class="flex flex-row basis-1/2 content-evenly px-3">
+                    <i class="fa-solid fa-pepper-hot text-red-500 mt-1"></i>
+                    <span class="text-slate-600 font-thin capitalize">&nbsp;&nbsp;{{ menu.spice_level|e }}</span>
                 </div>
             </div>
         </div>

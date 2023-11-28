@@ -1,5 +1,5 @@
 <div class="flex flex-col h-full top-0 p-4 bg-white rounded-lg shadow-sm text-slate-500 text-base font-medium">
-    <div x-show="$store.pos.count === 0"
+    <div x-show="count === 0"
         class="flex-1 w-full p-4 opacity-25 select-none flex flex-col flex-wrap content-center justify-center">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 inline-block" fill="none" viewBox="0 0 24 24"
             stroke="currentColor">
@@ -7,46 +7,95 @@
                 d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
         <p>
-        <div class="text-center absolute bg-cyan-500 text-white w-5 h-5 text-xs p-0 leading-5 rounded-full -right-2 top-3"
-            x-text="$store.pos.cart.lenght"></div>
+        <div class="text-center absolute bg-cyan-500 w-5 h-5 text-xs p-0 leading-5 rounded-full -right-2 top-3"></div>
         CART EMPTY
         </p>
     </div>
     <!-- cart items -->
-    <div x-show="$store.pos.count > 0" class="flex-1 flex flex-col overflow-auto">
-        <div class="flex-1 w-full px-4 overflow-auto">
-            <template x-for="item in $store.pos.cart" :key="item.id">
+    <div x-show="count > 0">
+        <p x-text="order.order_id" class="text-center text-sm font-medium"></p>
+    </div>
+    <div x-show="count > 0" class="flex-1 flex flex-col overflow-auto">
+        <div class="flex-1 w-full overflow-auto">
+            <template x-for="item in cart" :key="item.id">
                 <div
-                    class="select-none mb-3 bg-blue-200 rounded-lg w-full text-blue-gray-700 py-2 px-2 flex justify-center">
-                    <img :src="item.image" alt="" class="rounded-lg h-10 w-10 bg-white shadow mr-2">
+                    class="select-none mb-3 bg-gray-100 text-gray-600 rounded-lg w-full text-blue-gray-700 p-2 flex justify-center">
+                    <img :src="item.image" alt="" class="rounded-lg h-14 w-14 bg-white shadow mr-2">
                     <div class="flex-grow">
-                        <h5 class="text-sm" x-text="item.name"></h5>
-                        <p class="text-xs block" x-text="item.price"></p>
+                        <p class="text-sm font-thin" x-text="item.name"></p>
+                        <p class="text-xs block font-thin" x-text="item.price"></p>
                     </div>
                     <div class="py-1">
                         <div class="w-28 grid grid-cols-3 gap-2 ml-2">
-                            <button x-on:click="addQty(item, -1)"
-                                class="rounded-lg text-center py-1 text-white bg-blue-gray-600 hover:bg-blue-gray-700 focus:outline-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-3 inline-block" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M20 12H4" />
-                                </svg>
+                            <button @click="removeQuantity(item)"
+                                class="rounded-lg text-center py-1 bg-blue-gray-600 hover:bg-blue-gray-700 focus:outline-none">
+                                <i class="fa-solid fa-minus text-sm"></i>
                             </button>
-                            <input x-model.number="item.qty" type="text"
+                            <input x-model.number="item.quantity" type="text"
                                 class="bg-white rounded-lg text-center shadow focus:outline-none focus:shadow-lg text-sm">
-                            <button x-on:click="addQty(item, 1)"
-                                class="rounded-lg text-center py-1 text-white bg-blue-gray-600 hover:bg-blue-gray-700 focus:outline-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-3 inline-block" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
+                            <button @click="addQuantity(item)"
+                                class="rounded-lg text-center py-1 bg-blue-gray-600 hover:bg-blue-gray-700 focus:outline-none">
+                                <i class="fa-solid fa-plus text-sm"></i>
                             </button>
                         </div>
                     </div>
-                </div>
+                    <div class="py-1 flex items-center">
+                        <button @click="removeItem(item)"
+                            class="text-center py-1 px-3 content-center focus:outline-none">
+                            <i class="fa-solid fa-trash text-xl"></i>
+                        </button>
+                    </div>
             </template>
+        </div>
+    </div>
+    <div x-data="{ tab: 'checkout' }" class="col-span-1 border-t border-gray-400">
+        <div class="flex mx-2 justify-between space-x-4 text-xl border-b border-gray-300">
+            <div class="hover:text-indigo-600 py-2"
+                :class="{'text-indigo-600 border-b border-indigo-600': tab == 'checkout'}" @click="tab = 'checkout'">
+                Checkout </div>
+
+            <div class="hover:text-indigo-600 py-2 pl-2"
+                :class="{'text-indigo-600 border-b border-indigo-600': tab == 'extras'}" @click="tab = 'extras'">
+                Extras</div>
+        </div>
+        <!-- cart checkout -->
+        <div x-show="tab == 'checkout'" class="flex flex-shrink flex-col justify-end py-4">
+            <ul class="my-4 space-y-2 font-sans">
+                <li>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm">Subtotal:</span>
+                        <span class="text-gray-500 text-sm font-medium" x-text="getTotal()"></span>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm">Taxes:</span>
+                        <span class="text-gray-500 dark:text-gray-400 text-sm font-medium">0</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex items-center justify-between">
+                        <span>Total:</span>
+                        <span class="text-gray-800 dark:text-gray-100 text-xl font-semibold" x-text="getTotal()"></span>
+                    </div>
+                </li>
+            </ul>
+            <div class=" mt-4 flex flex-col justify-between text-xs font-bold">
+                <p x-text="order.note"></p>
+                <button hx-post="/pos/order" hx-vals='js:{val: order.note}' type="button"
+                    class="border border-blue-700 rounded-lg text-white group p-2.5 bg-blue-600 hover:!shadow-xl hover:!shadow-blue-400/20">
+                    <span class="text-base font-medium">Checkout</span>
+                </button>
+            </div>
+        </div>
+        <!-- Extra info -->
+        <div x-show="tab == 'extras'" class="flex flex-shrink flex-col justify-end py-4">
+            <div class="mt-3">
+                <label for="extras" class="block text-sm text-gray-700 capitalize">extras</label>
+                <textarea x-model.text="order['note']" name="extras" id="extras" autocomplete="on"
+                    class="block w-full h-32 px-4 py-2.5 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+                    spellcheck="true"></textarea>
+            </div>
         </div>
     </div>
 </div>

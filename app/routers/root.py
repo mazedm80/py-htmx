@@ -1,7 +1,7 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Request
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, FileResponse
 
 from app import templates
 from app.utils.auth import Token, get_userinfo_for_page
@@ -17,9 +17,9 @@ async def read_root(cookie: Optional[Token] = Depends(get_userinfo_for_page)):
     return RedirectResponse(path, status_code=302)
 
 
-# @router.get(path="/favicon.ico", include_in_schema=False)
-# async def get_favicon():
-#     return FileResponse("static/img/favicon.ico")
+@router.get(path="/favicon.ico", include_in_schema=False)
+async def get_favicon():
+    return FileResponse("static/img/favicon.ico")
 
 
 @router.get(path="/not-found", summary='Gets the "Not Found" page', tags=["Pages"])

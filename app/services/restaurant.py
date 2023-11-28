@@ -6,6 +6,9 @@ from fastapi import Form
 from config.settings import settings
 
 
+API_HOST = settings.api.api_host
+
+
 def get_restaurant_form_creds(
     name: str = Form(),
     address: str = Form(),
@@ -33,7 +36,7 @@ async def get_restaurants(
     with httpx.Client() as client:
         try:
             response = client.get(
-                f"{settings.api_host}/restaurant",
+                f"{API_HOST}/restaurant",
                 headers={"Authorization": f"Bearer {user_session}"},
             )
             response.raise_for_status()
@@ -50,7 +53,7 @@ async def get_restaurant(
     with httpx.Client() as client:
         try:
             response = client.get(
-                f"{settings.api_host}/restaurant",
+                f"{API_HOST}/restaurant",
                 headers={"Authorization": f"Bearer {user_session}"},
                 params={"restaurant_id": restaurant_id},
             )
@@ -68,7 +71,7 @@ async def add_restaurant(
     with httpx.Client() as client:
         try:
             response = client.post(
-                f"{settings.api_host}/restaurant",
+                f"{API_HOST}/restaurant",
                 headers={"Authorization": f"Bearer {user_session}"},
                 json=data,
             )
@@ -88,7 +91,7 @@ async def update_restaurant(
             data["id"] = restaurant_id
             print(data)
             response = client.put(
-                f"{settings.api_host}/restaurant",
+                f"{API_HOST}/restaurant",
                 headers={"Authorization": f"Bearer {user_session}"},
                 json=data,
             )
@@ -105,7 +108,7 @@ async def delete_restaurant(
     with httpx.Client() as client:
         try:
             response = client.delete(
-                f"{settings.api_host}/restaurant",
+                f"{API_HOST}/restaurant",
                 headers={"Authorization": f"Bearer {user_session}"},
                 params={"restaurant_id": restaurant_id},
             )

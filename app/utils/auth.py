@@ -8,6 +8,9 @@ from app.utils.exceptions import UnauthorizedPageException
 from config.settings import settings
 
 
+API_HOST = settings.api.api_host
+
+
 class Token(BaseModel):
     """Token schema."""
 
@@ -65,9 +68,8 @@ def get_login_form_creds(
 ) -> Optional[AuthoToken]:
     cookie = None
     with httpx.Client() as client:
-        print(f"{settings.api_host}/auth/login")
         response = client.post(
-            f"{settings.api_host}/auth/login",
+            f"{API_HOST}/auth/login",
             params={"email": email, "password": password},
         )
         if response.status_code == 200:
@@ -91,7 +93,7 @@ def register_user(
         errors["password"] = "Passwords do not match"
     with httpx.Client() as client:
         response = client.post(
-            f"{settings.api_host}/auth/register",
+            f"{API_HOST}/auth/register",
             params={
                 "name": name,
                 "bday": bday,
@@ -113,7 +115,7 @@ def get_userinfo_for_page(user_session: Optional[str] = Cookie(default=None)) ->
     with httpx.Client() as client:
         try:
             response = client.get(
-                f"{settings.api_host}/auth/me",
+                f"{API_HOST}/auth/me",
                 headers={"Authorization": f"Bearer {user_session}"},
             )
             response.raise_for_status()

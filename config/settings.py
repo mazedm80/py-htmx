@@ -1,7 +1,8 @@
-from pydantic_settings import BaseSettings
+from pydantic import BaseModel
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class ApiSettings(BaseSettings):
+class API(BaseModel):
     """Schema for configuring API parameters."""
 
     host: str = "localhost"
@@ -11,10 +12,17 @@ class ApiSettings(BaseSettings):
     api_host: str = ""
     # api_host: str = "https://htmx.euro-bangla.eu"
 
-    class Config:
-        env_prefix = "API_"
-        env_file = ".env"
-        env_file_encoding = "utf-8"
+
+class Settings(BaseSettings):
+    """Schema for configuring API parameters."""
+
+    api: API = API()
+
+    model_config = SettingsConfigDict(
+        env_nested_delimiter="__",
+        env_file=".env",
+        env_file_encoding="utf-8",
+    )
 
 
-settings = ApiSettings()
+settings = Settings()

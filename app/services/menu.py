@@ -6,6 +6,9 @@ from fastapi import Form
 from config.settings import settings
 
 
+API_HOST = settings.api.api_host
+
+
 def get_menu_form_creds(
     name: str = Form(),
     price: int = Form(),
@@ -53,21 +56,20 @@ async def get_menu_items(
     category_id: Optional[int] = None,
 ) -> List:
     with httpx.Client() as client:
-        print(category_id)
         try:
             if category_id:
                 response = client.get(
-                    f"{settings.api_host}/menu",
+                    f"{API_HOST}/menu",
                     headers={"Authorization": f"Bearer {user_session}"},
                     params={"category_id": category_id},
                 )
             else:
                 response = client.get(
-                    f"{settings.api_host}/menu",
+                    f"{API_HOST}/menu",
                     headers={"Authorization": f"Bearer {user_session}"},
                 )
             response.raise_for_status()
-            menu_list = response.json()["menu_items"]
+            menu_list = response.json()
         except httpx.HTTPError as e:
             print(e)
             menu_list = []
@@ -81,12 +83,12 @@ async def get_menu_item(
     with httpx.Client() as client:
         try:
             response = client.get(
-                f"{settings.api_host}/menu",
+                f"{API_HOST}/menu",
                 headers={"Authorization": f"Bearer {user_session}"},
                 params={"menu_id": menu_id},
             )
             response.raise_for_status()
-            item = response.json()["menu_items"][0]
+            item = response.json()[0]
             if item.get("vegetarian"):
                 item["vegetarian"] = "yes"
             else:
@@ -115,7 +117,7 @@ async def add_menu_item(
     with httpx.Client() as client:
         try:
             response = client.post(
-                f"{settings.api_host}/menu",
+                f"{API_HOST}/menu",
                 headers={"Authorization": f"Bearer {user_session}"},
                 json=data,
             )
@@ -134,7 +136,7 @@ async def update_menu_item(
         try:
             data["id"] = menu_id
             response = client.put(
-                f"{settings.api_host}/menu",
+                f"{API_HOST}/menu",
                 headers={"Authorization": f"Bearer {user_session}"},
                 json=data,
             )
@@ -151,7 +153,7 @@ async def delete_menu_item(
     with httpx.Client() as client:
         try:
             response = client.delete(
-                f"{settings.api_host}/menu",
+                f"{API_HOST}/menu",
                 headers={"Authorization": f"Bearer {user_session}"},
                 params={"menu_id": menu_id},
             )
@@ -167,11 +169,11 @@ async def get_menu_categories(
     with httpx.Client() as client:
         try:
             response = client.get(
-                f"{settings.api_host}/menu/categories",
+                f"{API_HOST}/menu/categories",
                 headers={"Authorization": f"Bearer {user_session}"},
             )
             response.raise_for_status()
-            menu_categories = response.json()["menu_categories"]
+            menu_categories = response.json()
             options = []
             for category in menu_categories:
                 options.append(
@@ -195,7 +197,7 @@ async def get_menu_category(
     with httpx.Client() as client:
         try:
             response = client.get(
-                f"{settings.api_host}/menu/category",
+                f"{API_HOST}/menu/category",
                 headers={"Authorization": f"Bearer {user_session}"},
                 params={"category_id": category_id},
             )
@@ -213,7 +215,7 @@ async def add_menu_category(
     with httpx.Client() as client:
         try:
             response = client.post(
-                f"{settings.api_host}/menu/category",
+                f"{API_HOST}/menu/category",
                 headers={"Authorization": f"Bearer {user_session}"},
                 json=data,
             )
@@ -232,7 +234,7 @@ async def update_menu_category(
         try:
             data["id"] = category_id
             response = client.put(
-                f"{settings.api_host}/menu/category",
+                f"{API_HOST}/menu/category",
                 headers={"Authorization": f"Bearer {user_session}"},
                 json=data,
             )
@@ -249,7 +251,7 @@ async def delete_menu_category(
     with httpx.Client() as client:
         try:
             response = client.delete(
-                f"{settings.api_host}/menu/category",
+                f"{API_HOST}/menu/category",
                 headers={"Authorization": f"Bearer {user_session}"},
                 params={"category_id": category_id},
             )

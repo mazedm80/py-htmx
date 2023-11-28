@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
-from app.routers import dashboard, login, menu, pos, restaurant, root
+from app.routers import dashboard, login, menu, pos, restaurant, root, order
 from app.utils.exceptions import NotFoundException, UnauthorizedPageException
 
 app = FastAPI(
@@ -15,6 +15,7 @@ app.include_router(dashboard.router)
 app.include_router(restaurant.router)
 app.include_router(menu.router)
 app.include_router(pos.router)
+app.include_router(order.router)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 

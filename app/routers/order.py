@@ -8,32 +8,29 @@ from app.services.menu import get_menu_categories, get_menu_items
 from app.utils.auth import User, UserSession, get_user_session, get_userinfo_for_page
 
 router = APIRouter(
-    prefix="/pos",
-    tags=["pos"],
+    prefix="/order",
+    tags=["order"],
 )
 
 
-# POS page routers
-# POS page
+# Order page routers
+# Order page
 @router.get(
     path="",
-    summary="Gets the POS page.",
+    summary="Gets the Order page.",
     tags=["Pages"],
     response_class=HTMLResponse,
 )
-async def get_pos_page(
+async def get_order_page(
     request: Request,
     user: Optional[User] = Depends(get_userinfo_for_page),
-    session: Optional[UserSession] = Depends(get_user_session),
 ) -> HTMLResponse:
-    categories = await get_menu_categories(user_session=session.user_session)
     context = {
         "request": request,
-        "title": "pos",
+        "title": "order",
         "user": user,
-        "categories": categories * 2,
     }
-    return templates.TemplateResponse("pages/pos.html", context)
+    return templates.TemplateResponse("pages/order.html", context)
 
 
 # Get menus by category page

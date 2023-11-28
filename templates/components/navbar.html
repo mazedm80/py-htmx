@@ -97,6 +97,13 @@
 
                 <span class="mx-3 font-medium capitalize">POS</span>
             </a>
+
+            <a :class="{'text-gray-600 bg-gray-200': active == 'order'}"
+                class="flex items-center px-4 py-2 text-gray-500 transition-colors duration-300 transform rounded-lg hover:text-gray-600 hover:bg-gray-100 bg-opacity-40"
+                href="/order">
+                <i class="fa-solid fa-chart-bar text-xl"></i>
+                <span class="mx-3 font-medium capitalize">Order</span>
+            </a>
         </div>
         <div class="space-y-4">
             <h3 class="px-4 text-sm tracking-wider text-gray-400 uppercase">ACCOUNT PAGES</h3>
