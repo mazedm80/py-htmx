@@ -1,5 +1,6 @@
-function initApp() {
-    const app = {
+document.addEventListener('alpine:init', () => {
+    Alpine.store(
+        'pos', {
         selected: '',
         cart: [],
         count: 0,
@@ -8,10 +9,11 @@ function initApp() {
             this.cart = [];
             this.order = {
                 order_id: ULID.ulid(),
-                restaurant_id: '',
-                table_number: '',
+                restaurant_id: 2,
+                user_id: 7,
+                table_number: 1,
                 status: 'pending',
-                order_type: 'dine-in',
+                order_type: 'dine_in',
                 payment_status: 'pending',
                 total: 0,
                 coupon_code: '',
@@ -69,16 +71,31 @@ function initApp() {
         },
         checkout() {
             this.order.total = this.getTotal();
-            this.order['items'] = this.cart.forEach(item => {
+            // only take id and quantity from cart and store it into order.items
+            this.order.items = this.cart.map(item => {
                 return {
-                    order_id: this.order.order_id,
                     menu_item_id: item.id,
                     quantity: item.quantity,
-                    price: item.price,
+                    price: item.price
                 }
             });
-            console.log(this.order);
+            // send a post request to server
+            fetch('/order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                },
+                body: JSON.stringify(this.order)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    this.init();
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
         }
-    };
-    return app;
-}
+    },
+    )
+})

@@ -2,7 +2,7 @@
 <section class=" text-slate-500 text-base font-medium">
     <div class="grid grid-cols-2 gap-2 md:grid-cols-3 xl:grid-cols-4">
         {% for menu in menus %}
-        <div role="button" title="{{ menu.name|e }}" x-data @click="addToCart({{ menu|e }})"
+        <div role="button" title="{{ menu.name|e }}" x-data @click="$store.pos.addToCart({{ menu|e }})"
             class="flex flex-col select-none cursor-pointer transition-shadow overflow-hidden rounded-2xl bg-white shadow hover:shadow-lg">
             <div class="flex flex-row content-evenly px-3 mt-3 ml-3">
                 <i class="fa-solid text-slate-600 fa-stopwatch mt-1"></i>
