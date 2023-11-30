@@ -31,7 +31,7 @@ async def get_pos_page(
         "request": request,
         "title": "pos",
         "user": user,
-        "categories": categories * 2,
+        "categories": categories,
     }
     return templates.TemplateResponse("pages/pos.html", context)
 
@@ -66,6 +66,6 @@ async def get_pos_menu_page(
         )
     context = {
         "request": request,
-        "menus": trimmed_menus * 5,
+        "menus": trimmed_menus,
     }
     return templates.TemplateResponse("partials/pos/menus.html", context)

@@ -47,7 +47,7 @@ async def get_menu_page(
         "request": request,
         "title": title,
         "user": user,
-        "menu_list": menu_list * 4,
+        "menu_list": menu_list,
     }
     return templates.TemplateResponse("pages/menu.html", context)
 
@@ -311,8 +311,9 @@ async def get_options_page(
     session: Optional[UserSession] = Depends(get_user_session),
 ):
     options = await get_menu_categories(user_session=session.user_session)
-    name = "Category"
-    context = {"request": request, "name": name, "options": options}
+    name = "category"
+    id = "category_id"
+    context = {"request": request, "name": name, "id": id, "options": options}
     return templates.TemplateResponse("partials/menu/category_list.html", context)
 
 

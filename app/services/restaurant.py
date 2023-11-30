@@ -33,9 +33,9 @@ def get_restaurant_form_creds(
 async def get_restaurants(
     user_session: str,
 ) -> List:
-    with httpx.Client() as client:
+    async with httpx.AsyncClient() as client:
         try:
-            response = client.get(
+            response = await client.get(
                 f"{API_HOST}/restaurant",
                 headers={"Authorization": f"Bearer {user_session}"},
             )
@@ -50,9 +50,9 @@ async def get_restaurant(
     restaurant_id: int,
     user_session: str,
 ) -> Dict:
-    with httpx.Client() as client:
+    async with httpx.AsyncClient() as client:
         try:
-            response = client.get(
+            response = await client.get(
                 f"{API_HOST}/restaurant",
                 headers={"Authorization": f"Bearer {user_session}"},
                 params={"restaurant_id": restaurant_id},
@@ -68,9 +68,9 @@ async def add_restaurant(
     data: dict,
     user_session: str,
 ) -> int:
-    with httpx.Client() as client:
+    async with httpx.AsyncClient() as client:
         try:
-            response = client.post(
+            response = await client.post(
                 f"{API_HOST}/restaurant",
                 headers={"Authorization": f"Bearer {user_session}"},
                 json=data,
@@ -86,11 +86,10 @@ async def update_restaurant(
     restaurant_id: int,
     user_session: str,
 ) -> int:
-    with httpx.Client() as client:
+    async with httpx.AsyncClient() as client:
         try:
             data["id"] = restaurant_id
-            print(data)
-            response = client.put(
+            response = await client.put(
                 f"{API_HOST}/restaurant",
                 headers={"Authorization": f"Bearer {user_session}"},
                 json=data,
@@ -105,9 +104,9 @@ async def delete_restaurant(
     restaurant_id: int,
     user_session: str,
 ) -> int:
-    with httpx.Client() as client:
+    async with httpx.AsyncClient() as client:
         try:
-            response = client.delete(
+            response = await client.delete(
                 f"{API_HOST}/restaurant",
                 headers={"Authorization": f"Bearer {user_session}"},
                 params={"restaurant_id": restaurant_id},

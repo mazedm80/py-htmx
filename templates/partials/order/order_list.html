@@ -1,0 +1,26 @@
+<div x-data="{ selected: 'None'}" class="flex-1 w-full overflow-auto">
+    {% for order in orders %}
+    <div hx-get="/order/details/{{order.order_id}}" hx-target="#order-details" hx-swap="innerHTML" hx-trigger="click"
+        @click="selected = '{{order.order_id[-4:]}}'" :class="{
+            'border-gray-300': selected != '{{order.order_id[-4:]}}',
+            'border-blue-500': selected == '{{order.order_id[-4:]}}'
+        }"
+        class="flex flex-col items-start justify-start bg-white m-3 p-4 border-2 rounded-lg cursor-pointer shadow-lg transition-colors duration-500 ease-in-out hover:border-blue-500">
+        <h4 class="text-xl font-medium text-gray-900">Order #{{"%s"|format(order.order_id[-4:])|e}}
+        </h4>
+        <div class="flex flex-row justify-between w-full">
+            <p class="text-base font-medium">Table #{{order.table_number|e}}</p>
+            <p class="text-base font-medium">{{order.time|convert_time}}</p>
+        </div>
+        <div class="flex flex-row justify-between w-full mt-2">
+            <p class="text-base font-medium">Total: {{order.total_amount|e}}</p>
+            <p class="text-base font-medium">Status:
+                <span class="inline-block bg-yellow-500 rounded-md px-2 text-white">Pending</span>
+            </p>
+            <p class="text-base font-medium">Payment:
+                <span class="inline-block bg-green-500 rounded-md px-2 text-white">Paid</span>
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+</div>

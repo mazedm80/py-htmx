@@ -1,0 +1,95 @@
+<!-- Order info -->
+<div class="border-b border-gray-300 mb-6">
+    <h4 class="text-2xl font-medium text-gray-900">Order info</h4>
+    <div class="flex flex-row">
+        <p class="basis-1/5 text-xl font-medium my-2">Order number</p>
+        <p class="basis-4/5 text-xl font-medium my-2">{{"%s"|format(order.order_id[-4:])|e}}</p>
+    </div>
+    <div class="flex flex-row">
+        <p class="basis-1/5 text-xl font-medium my-2">Time placed</p>
+        <p class="basis-4/5 text-xl font-medium my-2">{{order.time|convert_time}}</p>
+    </div>
+    <div class="flex flex-row">
+        <p class="basis-1/5 text-xl font-medium my-2">Order type</p>
+        <p class="basis-4/5 text-xl font-medium my-2">{{order.order_type|e}}</p>
+    </div>
+    {% if order.note%}
+    <div class="flex flex-row">
+        <p class="basis-1/5 text-xl font-medium my-2">Note</p>
+        <p class="basis-4/5 text-xl font-medium my-2 text-red-300">{{order.note|e}}</p>
+    </div>
+    {% endif %}
+</div>
+<!-- Item info -->
+<div class="border-b border-gray-300 mb-6">
+    <!-- <div class="border-b border-gray-300 mb-6 overflow-auto"> -->
+    <h4 class="text-2xl font-medium text-gray-900">Item info</h4>
+    <div class="relative overflow-auto">
+        <table class="w-full text-base text-left">
+            <thead class="text-base text-gray-700 uppercase">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Product name
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Quantity
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Price
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order_details %}
+                <tr>
+                    <th scope="row" class="px-6 py-2 font-medium whitespace-nowrap">
+                        {{item.name|e}}
+                    </th>
+                    <td class="px-6 py-2">
+                        {{item.quantity|e}}
+                    </td>
+                    <td class="px-6 py-2">
+                        {{item.price|e}}
+                    </td>
+                    <td class="px-6 py-2">
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="border-b border-gray-300 mb-6">
+    <h4 class="text-2xl font-medium text-gray-900">Payment info</h4>
+    <div class="flex flex-row">
+        <p class="basis-1/5 text-xl font-medium my-2">Payment Status</p>
+        <p class="basis-4/5 text-xl font-medium my-2 capitalize">{{order.payment_status}}</p>
+    </div>
+    <div class="flex flex-row">
+        <p class="basis-1/5 text-xl font-medium my-2">Total</p>
+        <p class="basis-4/5 text-xl font-medium my-2">{{order.total_amount|e}}</p>
+    </div>
+    {% if order.coupone_code%}
+    <div class="flex flex-row">
+        <p class="basis-1/5 text-xl font-medium my-2">Coupone code</p>
+        <p class="basis-4/5 text-xl font-medium my-2">{{order.coupon_code|e}}</p>
+    </div>
+    {% endif %}
+</div>
+<div>
+    <h4 class="text-2xl font-medium text-gray-900">Quick actions</h4>
+    <div class="flex flex-row p-2">
+        <button hx-post="/order/accept/{{order.order_id}}" hx-target="#order-details" hx-swap="innerHTML"
+            hx-trigger="click" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 my-3 mx-6 rounded">
+            Accept
+        </button>
+        <button hx-post="/order/prepare/{{order.order_id}}" hx-target="#order-details" hx-swap="innerHTML"
+            hx-trigger="click" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 my-3 mx-6 rounded">
+            Reject
+        </button>
+    </div>
+</div>

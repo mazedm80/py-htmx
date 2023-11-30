@@ -81,7 +81,7 @@
                         {% with name='discount' %}
                         {% include "components/form/number.html" %}
                         {% endwith %}
-                        {% with id='status', name='product availability' ,options=['Available','Unavailable'] %}
+                        {% with id='status', name='product availability', options=['available','unavailable'] %}
                         {% include "components/form/dropdown.html" %}
                         {% endwith %}
                     </div>

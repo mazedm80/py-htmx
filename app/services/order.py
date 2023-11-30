@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any, Tuple
 
 import httpx
 
@@ -23,9 +23,9 @@ async def post_order(
         "coupon_code": data["coupon_code"],
         "note": data["note"],
     }
-    with httpx.Client() as client:
+    async with httpx.AsyncClient() as client:
         try:
-            response = client.post(
+            response = await client.post(
                 f"{API_HOST}/order",
                 headers={"Authorization": f"Bearer {user_session}"},
                 params={"restaurant_id": data["restaurant_id"]},
@@ -33,25 +33,74 @@ async def post_order(
             )
             response.raise_for_status()
             order_id = response.json()
-        except httpx.HTTPError:
+            if order_id:
+                try:
+                    items = []
+                    for item in data["items"]:
+                        items.append(
+                            {
+                                "menu_item_id": item["menu_item_id"],
+                                "quantity": item["quantity"],
+                                "price": item["price"],
+                            }
+                        )
+                    response = await client.post(
+                        f"{API_HOST}/order/order_details",
+                        headers={"Authorization": f"Bearer {user_session}"},
+                        params={"order_id": order_id},
+                        json=items,
+                    )
+                    response.raise_for_status()
+                except httpx.HTTPError as e:
+                    print(e)
+                    response = None
+        except httpx.HTTPError as e:
+            print(e)
             response = None
+    return response.status_code
+
+
+async def get_order_by_status(
+    status: str,
+    user_session: str,
+) -> Tuple[List[Dict[str, Any]]]:
+    async with httpx.AsyncClient() as client:
         try:
-            items = []
-            for item in data["items"]:
-                items.append(
-                    {
-                        "menu_item_id": item["menu_item_id"],
-                        "quantity": item["quantity"],
-                        "price": item["price"],
-                    }
-                )
-            response = client.post(
+            response = await client.get(
+                f"{API_HOST}/order/by_status",
+                headers={"Authorization": f"Bearer {user_session}"},
+                params={"restaurant_id": 2, "status": status},
+            )
+            response.raise_for_status()
+            orders = response.json()
+        except httpx.HTTPError:
+            orders = []
+    return orders
+
+
+async def get_order_details_by_id(
+    order_id: str,
+    user_session: str,
+) -> Tuple[Dict[str, Any]]:
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(
+                f"{API_HOST}/order/details",
+                headers={"Authorization": f"Bearer {user_session}"},
+                params={"order_id": order_id},
+            )
+            response.raise_for_status()
+            order = response.json()
+        except httpx.HTTPError:
+            order = {}
+        try:
+            response = await client.get(
                 f"{API_HOST}/order/order_details",
                 headers={"Authorization": f"Bearer {user_session}"},
                 params={"order_id": order_id},
-                json=items,
             )
             response.raise_for_status()
+            order_details = response.json()
         except httpx.HTTPError:
-            response = None
-    return response.status_code
+            order_details = []
+    return order, order_details
