@@ -60,16 +60,45 @@ async def post_order(
     return response.status_code
 
 
+async def update_order_status(
+    status: Optional[str],
+    payment_status: Optional[str],
+    order_id: str,
+    user_session: str,
+) -> int:
+    if status:
+        params = {"status": status, "order_id": order_id}
+    elif payment_status:
+        params = {"payment_status": payment_status, "order_id": order_id}
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.put(
+                f"{API_HOST}/order/status",
+                headers={"Authorization": f"Bearer {user_session}"},
+                params=params,
+            )
+            response.raise_for_status()
+        except httpx.HTTPError as e:
+            print(e)
+            response = None
+    return response.status_code
+
+
 async def get_order_by_status(
-    status: str,
+    status: Optional[str],
+    payment_status: Optional[str],
     user_session: str,
 ) -> Tuple[List[Dict[str, Any]]]:
+    if status:
+        params = {"status": status, "restaurant_id": 2}
+    elif payment_status:
+        params = {"payment_status": payment_status, "restaurant_id": 2}
     async with httpx.AsyncClient() as client:
         try:
             response = await client.get(
                 f"{API_HOST}/order/by_status",
                 headers={"Authorization": f"Bearer {user_session}"},
-                params={"restaurant_id": 2, "status": status},
+                params=params,
             )
             response.raise_for_status()
             orders = response.json()

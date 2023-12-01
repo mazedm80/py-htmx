@@ -4,8 +4,19 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
 
 from app import templates
-from app.services.order import post_order, get_order_by_status, get_order_details_by_id
-from app.utils.auth import User, UserSession, get_user_session, get_userinfo_for_page
+from app.services.order import (
+    post_order,
+    get_order_by_status,
+    get_order_details_by_id,
+    update_order_status,
+)
+from app.utils.auth import (
+    User,
+    UserSession,
+    get_user_session,
+    get_userinfo_for_page,
+    UnauthorizedPageException,
+)
 
 router = APIRouter(
     prefix="/order",
@@ -16,7 +27,7 @@ router = APIRouter(
 # Order page routers
 # Order page
 @router.get(
-    path="",
+    path="/sales",
     summary="Gets the Order page.",
     tags=["Pages"],
     response_class=HTMLResponse,
@@ -33,73 +44,58 @@ async def get_order_page(
     return templates.TemplateResponse("pages/order.html", context)
 
 
-# Order prepared list component
+# Order kitchen view page
 @router.get(
-    path="/list/pending",
-    summary="Gets the Pending Order list component.",
+    path="/kitchen",
+    summary="Gets the Order kitchen view page.",
+    tags=["Pages"],
+    response_class=HTMLResponse,
+)
+async def get_order_kitchen_view_page(
+    request: Request,
+    user: Optional[User] = Depends(get_userinfo_for_page),
+    session: Optional[UserSession] = Depends(get_user_session),
+) -> HTMLResponse:
+    orders = await get_order_by_status(
+        payment_status=None,
+        user_session=session.user_session,
+        status="accepted",
+    )
+    context = {
+        "request": request,
+        "title": "kitchen",
+        "user": user,
+        "orders": orders,
+    }
+    return templates.TemplateResponse("pages/kitchen.html", context)
+
+
+# Order list by status component
+@router.get(
+    path="/list/status",
+    summary="Gets the Order list by ststus component.",
     tags=["Components"],
     response_class=HTMLResponse,
 )
 async def get_pending_order_list_component(
     request: Request,
+    status: Optional[str] = None,
+    payment_status: Optional[str] = None,
     session: Optional[UserSession] = Depends(get_user_session),
 ) -> HTMLResponse:
-    orders = await get_order_by_status(
-        status="pending", user_session=session.user_session
-    )
+    if status and payment_status is None:
+        orders = await get_order_by_status(
+            status=status, user_session=session.user_session, payment_status=None
+        )
+    elif payment_status and status is None:
+        orders = await get_order_by_status(
+            payment_status=payment_status,
+            user_session=session.user_session,
+            status=None,
+        )
+
     context = {"request": request, "orders": orders}
     return templates.TemplateResponse("partials/order/order_list.html", context)
-
-
-# Order accepted list component
-@router.get(
-    path="/list/accepted",
-    summary="Gets the Accepted Order list component.",
-    tags=["Components"],
-    response_class=HTMLResponse,
-)
-async def get_accepted_order_list_component(
-    request: Request,
-    user: Optional[User] = Depends(get_userinfo_for_page),
-) -> HTMLResponse:
-    context = {"request": request}
-    return templates.TemplateResponse(
-        "partials/order/order_list_prepared.html", context
-    )
-
-
-# Order prepared list component
-@router.get(
-    path="/list/prepared",
-    summary="Gets the Prepared Order list component.",
-    tags=["Components"],
-    response_class=HTMLResponse,
-)
-async def get_prepared_order_list_component(
-    request: Request,
-    user: Optional[User] = Depends(get_userinfo_for_page),
-) -> HTMLResponse:
-    context = {"request": request}
-    return templates.TemplateResponse(
-        "partials/order/order_list_prepared.html", context
-    )
-
-
-# Order completed list component
-@router.get(
-    path="/list/completed",
-    summary="Gets the Order of completed and unpaid list component.",
-    tags=["Components"],
-    response_class=HTMLResponse,
-)
-async def get_completed_order_list_component(
-    request: Request,
-    user: Optional[User] = Depends(get_userinfo_for_page),
-) -> HTMLResponse:
-    context = {"request": request}
-    return templates.TemplateResponse(
-        "partials/order/order_list_delivered.html", context
-    )
 
 
 # Order details component
@@ -141,3 +137,53 @@ async def create_order(
 ) -> None:
     status_code = await post_order(data=body, user_session=user_session.user_session)
     return status_code
+
+
+# update order status to accepted
+@router.put(
+    path="/{status}/{order_id}",
+    summary="Updates an order.",
+    tags=["Order"],
+    response_class=HTMLResponse,
+)
+async def update_order_status_to_accepted(
+    status: str,
+    order_id: str,
+    request: Request,
+    user_session: UserSession = Depends(get_user_session),
+) -> HTMLResponse:
+    if status == "accepted":
+        status_code = await update_order_status(
+            status=status,
+            order_id=order_id,
+            user_session=user_session.user_session,
+            payment_status=None,
+        )
+    elif status == "prepared":
+        status_code = await update_order_status(
+            status=status,
+            payment_status=None,
+            order_id=order_id,
+            user_session=user_session.user_session,
+        )
+    elif status == "cancelled":
+        status_code = await update_order_status(
+            status=None,
+            payment_status=status,
+            order_id=order_id,
+            user_session=user_session.user_session,
+        )
+    elif status == "completed":
+        status_code = await update_order_status(
+            status=status,
+            payment_status=None,
+            order_id=order_id,
+            user_session=user_session.user_session,
+        )
+    if status_code != 200:
+        raise UnauthorizedPageException
+    orders = await get_order_by_status(
+        status="pending", user_session=user_session.user_session, payment_status=None
+    )
+    context = {"request": request, "orders": orders}
+    return templates.TemplateResponse("partials/order/order_list.html", context)

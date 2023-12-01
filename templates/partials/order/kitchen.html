@@ -1,0 +1,30 @@
+<section class="flex flex-col flex-grow">
+    <div class="grid grid-cols-2 gap-2 md:grid-cols-3 xl:grid-cols-4">
+        {% for order in orders %}
+        <div
+            class="flex flex-col select-none cursor-pointer transition-shadow overflow-hidden rounded-xl bg-white shadow-lg hover:shadow-lg">
+            <div class="border-b border-gray-300 mb-6">
+                <h4 class="text-2xl font-medium text-gray-900">Order info</h4>
+                <div class="flex flex-row">
+                    <p class="basis-1/5 text-xl font-medium my-2">Order number</p>
+                    <p class="basis-4/5 text-xl font-medium my-2">{{"%s"|format(order.order_id[-4:])|e}}</p>
+                </div>
+                <div class="flex flex-row">
+                    <p class="basis-1/5 text-xl font-medium my-2">Time placed</p>
+                    <p class="basis-4/5 text-xl font-medium my-2">{{order.time|convert_time}}</p>
+                </div>
+                <div class="flex flex-row">
+                    <p class="basis-1/5 text-xl font-medium my-2">Order type</p>
+                    <p class="basis-4/5 text-xl font-medium my-2">{{order.order_type|e}}</p>
+                </div>
+                {% if order.note%}
+                <div class="flex flex-row">
+                    <p class="basis-1/5 text-xl font-medium my-2">Note</p>
+                    <p class="basis-4/5 text-xl font-medium my-2 text-red-300">{{order.note|e}}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>

@@ -1,4 +1,4 @@
-<div x-data="{ selected: 'None'}" class="flex-1 w-full overflow-auto">
+<div class="flex-1 w-full overflow-auto">
     {% for order in orders %}
     <div hx-get="/order/details/{{order.order_id}}" hx-target="#order-details" hx-swap="innerHTML" hx-trigger="click"
         @click="selected = '{{order.order_id[-4:]}}'" :class="{
@@ -15,10 +15,22 @@
         <div class="flex flex-row justify-between w-full mt-2">
             <p class="text-base font-medium">Total: {{order.total_amount|e}}</p>
             <p class="text-base font-medium">Status:
+                {% if order.status == 'pending' %}
                 <span class="inline-block bg-yellow-500 rounded-md px-2 text-white">Pending</span>
+                {% elif order.status == 'accepted' %}
+                <span class="inline-block bg-blue-500 rounded-md px-2 text-white">Accepted</span>
+                {% elif order.status == 'prepared' %}
+                <span class="inline-block bg-purple-500 rounded-md px-2 text-white">Prepared</span>
+                {% elif order.status == 'completed' %}
+                <span class="inline-block bg-green-500 rounded-md px-2 text-white">Completed</span>
+                {% endif %}
             </p>
             <p class="text-base font-medium">Payment:
+                {% if order.payment_status == 'pending' %}
+                <span class="inline-block bg-yellow-500 rounded-md px-2 text-white">Pending</span>
+                {% elif order.payment_status == 'paid' %}
                 <span class="inline-block bg-green-500 rounded-md px-2 text-white">Paid</span>
+                {% endif %}
             </p>
         </div>
     </div>

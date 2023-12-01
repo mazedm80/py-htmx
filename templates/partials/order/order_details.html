@@ -83,13 +83,45 @@
 <div>
     <h4 class="text-2xl font-medium text-gray-900">Quick actions</h4>
     <div class="flex flex-row p-2">
-        <button hx-post="/order/accept/{{order.order_id}}" hx-target="#order-details" hx-swap="innerHTML"
-            hx-trigger="click" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 my-3 mx-6 rounded">
+        {% if order.status == 'pending' %}
+        <button hx-put="/order/accepted/{{order.order_id|e}}" hx-target="#orders" hx-swap="innerHTML" hx-trigger="click"
+            @click="selected = 'None'"
+            class=" bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 my-3 mx-6 rounded">
             Accept
         </button>
-        <button hx-post="/order/prepare/{{order.order_id}}" hx-target="#order-details" hx-swap="innerHTML"
-            hx-trigger="click" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 my-3 mx-6 rounded">
+        <button hx-put="/order/reject/'{{order.order_id}}" hx-target="#orders" hx-swap="innerHTML" hx-trigger="click"
+            @click="selected = 'None'" class=" bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 my-3 mx-6
+            rounded">
             Reject
         </button>
+        {% elif order.status == 'accepted' %}
+        <button hx-put="/order/prepared/{{order.order_id|e}}" hx-target="#orders" hx-swap="innerHTML" hx-trigger="click"
+            @click="selected = 'None'"
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 my-3 mx-6 rounded">
+            Prepared
+        </button>
+        <button hx-put="/order/cancelled/{{order.order_id|e}}" hx-target="#orders" hx-swap="innerHTML"
+            hx-trigger="click" @click="selected = 'None'"
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 my-3 mx-6 rounded">
+            Cancel
+        </button>
+        {% elif order.status == 'prepared' %}
+        <button hx-put="/order/completed/{{order.order_id|e}}" hx-target="#orders" hx-swap="innerHTML"
+            hx-trigger="click" @click="selected = 'None'"
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 my-3 mx-6 rounded">
+            Completed
+        </button>
+        <button hx-put="/order/cancelled/{{order.order_id|e}}" hx-target="#orders" hx-swap="innerHTML"
+            hx-trigger="click" @click="selected = 'None'"
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 my-3 mx-6 rounded">
+            Cancel
+        </button>
+        {% elif order.status == 'completed' and order.payment_status == 'pending' %}
+        <button hx-put="/order/paid/{{order.order_id|e}}" hx-target="#orders" hx-swap="innerHTML" hx-trigger="click"
+            @click="selected = 'None'"
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 my-3 mx-6 rounded">
+            Paid
+        </button>
+        {% endif %}
     </div>
 </div>
