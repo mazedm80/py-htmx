@@ -43,11 +43,18 @@ async def get_menu_page(
 ):
     menu_list = await get_menu_items(user_session=session.user_session)
     title = "menu"
+    table_pagination = {
+        "page": 1,
+        "page_size": 10,
+        "total": len(menu_list),
+        "page_nos": list(range(1, len(menu_list) // 10 + 2)),
+    }
     context = {
         "request": request,
         "title": title,
         "user": user,
-        "menu_list": menu_list,
+        "menu_list": menu_list[:10],
+        "table_pagination": table_pagination,
     }
     return templates.TemplateResponse("pages/menu.html", context)
 
@@ -190,7 +197,7 @@ async def get_menu_data(
         except httpx.HTTPError as e:
             print(e)
             menu_list = []
-    context = {"request": request, "menu_list": menu_list}
+    context = {"request": request, "menu_list": menu_list[0:5]}
     return templates.TemplateResponse("partials/menu/menu_list.html", context)
 
 
