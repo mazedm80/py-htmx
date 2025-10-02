@@ -21,13 +21,7 @@
 3. Run the service locally
 
     ```sh
-    # Your code here
-    ```
-
     make run
-
-    ```sh
-    # Your code here
     ```
 
 ## Available Targets
