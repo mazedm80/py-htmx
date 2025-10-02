@@ -1,6 +1,6 @@
 ## Prerequisites
 
-- Python 3.8 or later
+- Python 3.10 or later
 - `make`
 
 ## Getting Started
@@ -40,7 +40,7 @@ There are also some aliases defined, such as `i` for `install`, `r` for `run`, `
 
 The following dependencies are required to use this Makefile:
 
-- python 3.8 or higher
+- python 3.10 or higher
 - poetry 1.6.0 or higher
 - black 23.9.0 or higher
 - isort 5.12.0 or higher
